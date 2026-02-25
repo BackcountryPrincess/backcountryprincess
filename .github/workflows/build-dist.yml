@@ -1,0 +1,11 @@
+maple
+ ├─ .github
+ │   └─ workflows
+ │        └─ build-dist.yml
+ ├─ netlify
+ │   └─ functions
+ ├─ src
+ ├─ README.md
+ ├─ netlify.toml
+ ├─ package.json
+ └─ vite.config.js
