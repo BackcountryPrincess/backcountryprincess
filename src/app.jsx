@@ -1,8 +1,12 @@
 export default function App() {
   return (
-    <div style={{ minHeight: "100vh", backgroundColor: "#0b0b0b", color: "#ffffff", padding: "40px" }}>
+    <div style={{ padding: "40px", color: "white", background: "black", minHeight: "100vh" }}>
       <h1>Maple Sap Predictor</h1>
-      <p>Backend connection working.</p>
+      <p>Frontend running.</p>
+
+      <button onClick={() => alert("React working")}>
+        Test Button
+      </button>
     </div>
   );
 }
