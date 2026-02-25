@@ -1,13 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Smokey River Maple · Sap Flow Predictor</title>
-    <style>* { margin: 0; padding: 0; box-sizing: border-box; } body { background: #111111; }</style>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
-</html>
+export default function App() {
+  return (
+    <div style={{color: "white", padding: "40px"}}>
+      <h1>Maple Sap Predictor</h1>
+      <p>Backend connection working.</p>
+    </div>
+  );
+}
