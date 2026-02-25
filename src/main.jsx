@@ -1,6 +1,5 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import './style.css'
 
 document.querySelector('#app').innerHTML = `
   <h1>Maple Sap Predictor</h1>
