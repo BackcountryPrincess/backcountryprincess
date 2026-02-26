@@ -1,4 +1,4 @@
-name: Build dist (Vite)
+name: Build dist.zip (Vite)
 
 on:
   push:
@@ -20,14 +20,29 @@ jobs:
 
       - name: Install
         working-directory: src
-        run: npm install
+        run: npm ci
 
       - name: Build
         working-directory: src
         run: npm run build
 
-      - name: Upload dist artifact
+      # Create dist.zip from the contents of src/dist (zip contains index.html + assets/, not a nested dist/ folder)
+      - name: Create dist.zip
+        working-directory: src/dist
+        run: |
+          rm -f ../../dist.zip
+          zip -r ../../dist.zip .
+
+      # Upload the ZIP you will deploy to GreenGeeks
+      - name: Upload dist.zip artifact
         uses: actions/upload-artifact@v4
         with:
-          name: dist
+          name: dist-zip
+          path: dist.zip
+
+      # Optional: also upload the raw dist folder for inspection
+      - name: Upload dist folder artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-folder
           path: src/dist
