@@ -18,7 +18,7 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install
+      - name: Install deps
         working-directory: src
         run: npm install
 
@@ -26,15 +26,14 @@ jobs:
         working-directory: src
         run: npm run build
 
-      # Create dist.zip from the contents of src/dist (no nested dist folder)
       - name: Create dist.zip
-        working-directory: src/dist
+        working-directory: src
         run: |
-          rm -f ../../dist.zip
-          zip -r ../../dist.zip .
+          cd dist
+          zip -r ../dist.zip .
 
       - name: Upload dist.zip artifact
         uses: actions/upload-artifact@v4
         with:
           name: dist-zip
-          path: dist.zip
+          path: src/dist.zip
