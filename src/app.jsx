@@ -1,34 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 
-const USE_FAKE = false; // LIVE DATA
-const FAKE_WEATHER = [
-  { date:"2026-02-26", minC:-16.5, maxC:-5.7,  precip:1.2, solar:12.08 },
-  { date:"2026-02-27", minC:-8.2,  maxC:2.0,   precip:0.9, solar:7.84  },
-  { date:"2026-02-28", minC:-20.1, maxC:-0.1,  precip:0.0, solar:12.89 },
-  { date:"2026-03-01", minC:-3.5,  maxC:4.2,   precip:1.1, solar:9.20  },
-  { date:"2026-03-02", minC:-7.6,  maxC:0.2,   precip:0.0, solar:12.64 },
-  { date:"2026-03-03", minC:-2.0,  maxC:6.5,   precip:2.0, solar:8.50  },
-  { date:"2026-03-04", minC:-12.5, maxC:1.1,   precip:0.0, solar:12.25 },
-];
-
-const MOCK_CITIES = [
-  { id:1,  name:"Sudbury",        admin1:"Ontario",       country_code:"CA", latitude:46.49, longitude:-81.01 },
-  { id:2,  name:"Huntsville",     admin1:"Ontario",       country_code:"CA", latitude:45.33, longitude:-79.22 },
-  { id:3,  name:"Haliburton",     admin1:"Ontario",       country_code:"CA", latitude:45.03, longitude:-78.55 },
-  { id:4,  name:"Muskoka",        admin1:"Ontario",       country_code:"CA", latitude:45.10, longitude:-79.50 },
-  { id:5,  name:"Parry Sound",    admin1:"Ontario",       country_code:"CA", latitude:45.35, longitude:-80.03 },
-  { id:6,  name:"Algonquin Park", admin1:"Ontario",       country_code:"CA", latitude:45.53, longitude:-78.35 },
-  { id:7,  name:"North Bay",      admin1:"Ontario",       country_code:"CA", latitude:46.31, longitude:-79.46 },
-  { id:8,  name:"Timmins",        admin1:"Ontario",       country_code:"CA", latitude:48.47, longitude:-81.33 },
-  { id:9,  name:"Thunder Bay",    admin1:"Ontario",       country_code:"CA", latitude:48.38, longitude:-89.25 },
-  { id:10, name:"Ottawa",         admin1:"Ontario",       country_code:"CA", latitude:45.42, longitude:-75.69 },
-  { id:11, name:"Montreal",       admin1:"Quebec",        country_code:"CA", latitude:45.50, longitude:-73.57 },
-  { id:12, name:"Quebec City",    admin1:"Quebec",        country_code:"CA", latitude:46.81, longitude:-71.21 },
-  { id:13, name:"Vermont",        admin1:"Vermont",       country_code:"US", latitude:44.00, longitude:-72.70 },
-  { id:14, name:"New Hampshire",  admin1:"New Hampshire", country_code:"US", latitude:43.19, longitude:-71.57 },
-  { id:15, name:"Maine",          admin1:"Maine",         country_code:"US", latitude:45.25, longitude:-69.44 },
-  { id:16, name:"New York",       admin1:"New York",      country_code:"US", latitude:42.65, longitude:-73.75 },
-];
+// City search uses Open-Meteo geocoding API — works worldwide, no key needed
 
 // ── PATREON TIER LINKS ────────────────────────────────────────────────────────
 const PATREON_WATCH   = "https://www.patreon.com/membership/28012041";
@@ -459,12 +431,13 @@ export default function App() {
     const q = e.target.value; setCityQuery(q);
     clearTimeout(searchTimer.current);
     if (!q || q.length < 2) { setCityResults([]); return; }
-    searchTimer.current = setTimeout(() => {
-      const ql = q.toLowerCase();
-      setCityResults(MOCK_CITIES.filter(c =>
-        c.name.toLowerCase().includes(ql) || c.admin1.toLowerCase().includes(ql)
-      ).slice(0,6));
-    }, 250);
+    searchTimer.current = setTimeout(async () => {
+      try {
+        const res = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(q)}&count=6&language=en&format=json`);
+        const data = await res.json();
+        setCityResults(data.results || []);
+      } catch { setCityResults([]); }
+    }, 350);
   }
   function selectCity(r) {
     setLocation({ name:`${r.name}, ${r.admin1}`, lat:+r.latitude.toFixed(4), lon:+r.longitude.toFixed(4) });
@@ -473,11 +446,6 @@ export default function App() {
 
   async function loadWeather() {
     setLoading(true); setError("");
-    if (USE_FAKE) {
-      await new Promise(r => setTimeout(r,250));
-      setRows(FAKE_WEATHER.map(r => ({...r, sap:computeSap(r.minC,r.maxC,r.solar)})));
-      setLoading(false); return;
-    }
     try {
       const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${location.lat}&longitude=${location.lon}&daily=temperature_2m_min,temperature_2m_max,precipitation_sum,shortwave_radiation_sum&timezone=auto`);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -665,7 +633,7 @@ export default function App() {
                     );
                   })}
                 </div>
-                <div style={{marginTop:"12px"}} onClick={openUpsell} style={{cursor:"pointer"}}>
+                <div style={{marginTop:"12px",cursor:"pointer"}} onClick={openUpsell}>
                   <div className="upsell">🍁 <strong>Want temp, solar & candle charts?</strong> Upgrade to <strong>Planner ($25/mo)</strong>. <a>Subscribe →</a></div>
                 </div>
               </>
