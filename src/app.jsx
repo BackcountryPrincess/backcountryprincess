@@ -30,6 +30,98 @@ const MOCK_CITIES = [
   { id:16, name:"New York",       admin1:"New York",      country_code:"US", latitude:42.65, longitude:-73.75 },
 ];
 
+// ── PATREON TIER LINKS ────────────────────────────────────────────────────────
+const PATREON_WATCH   = "https://www.patreon.com/membership/28012041";
+const PATREON_PLANNER = "https://www.patreon.com/membership/28012031";
+const PATREON_PRO     = "https://www.patreon.com/membership/28012026";
+const PATREON_POST    = "https://www.patreon.com/posts/151815836/";
+const PATREON_LOGIN   = "/patreon/login.php";
+const PATREON_MANAGE  = "https://www.patreon.com/settings/memberships";
+
+// ── UPSELL MODAL ──────────────────────────────────────────────────────────────
+function UpsellModal({ onClose, currentTier = 0 }) {
+  return (
+    <div style={{
+      position:"fixed",inset:0,zIndex:1000,
+      background:"rgba(0,0,0,0.85)",
+      display:"flex",alignItems:"flex-end",justifyContent:"center",
+      backdropFilter:"blur(4px)",
+    }} onClick={onClose}>
+      <div onClick={e=>e.stopPropagation()} style={{
+        background:"#141414",borderRadius:"20px 20px 0 0",
+        padding:"24px 20px 40px",width:"100%",maxWidth:"430px",
+        border:"1px solid rgba(255,255,255,0.1)",
+        borderBottom:"none",
+      }}>
+        {/* handle */}
+        <div style={{width:36,height:4,background:"rgba(255,255,255,0.2)",borderRadius:2,margin:"0 auto 20px"}}/>
+
+        <div style={{fontFamily:"Montserrat,sans-serif",fontSize:"20px",fontWeight:900,color:"#fff",marginBottom:4}}>
+          🍁 Want More Maple?
+        </div>
+        <div style={{fontSize:"12px",color:"rgba(255,255,255,0.4)",marginBottom:20,lineHeight:1.6}}>
+          Unlock the full forecast with a Backcountry Princess membership on Patreon.
+        </div>
+
+        {/* Tier cards */}
+        {[
+          { name:"SAP Watch",   price:"$10/mo", color:"#3b82f6", rank:1,
+            perks:["7-day sap dot forecast","Color-coded daily flow","Perfect for planning weekend taps"] },
+          { name:"SAP Planner", price:"$25/mo", color:"#a855f7", rank:2,
+            perks:["Full 7-day ring charts","Temp candlestick view","Solar + sap index per day"] },
+          { name:"SAP Pro",     price:"$50/mo", color:"#cbd5e1", rank:3,
+            perks:["Historical season charts","Advanced analytics","Coming soon — join waitlist"] },
+        ].filter(t => t.rank > currentTier).map(tier => (
+          <div key={tier.name} style={{
+            border:`1px solid ${tier.color}55`,
+            background:`${tier.color}12`,
+            borderRadius:12,padding:"14px 16px",marginBottom:10,
+          }}>
+            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
+              <div style={{fontFamily:"Montserrat,sans-serif",fontSize:"14px",fontWeight:700,color:"#fff"}}>{tier.name}</div>
+              <div style={{
+                background:tier.color,color:"#000",
+                fontFamily:"Montserrat,sans-serif",fontSize:"11px",fontWeight:700,
+                padding:"4px 10px",borderRadius:999,
+              }}>{tier.price}</div>
+            </div>
+            {tier.perks.map(p => (
+              <div key={p} style={{fontSize:"11px",color:"rgba(255,255,255,0.5)",lineHeight:1.8}}>✓ {p}</div>
+            ))}
+          </div>
+        ))}
+
+        {/* Single CTA → Patreon post */}
+        <button onClick={()=>window.open(PATREON_POST,"_blank")} style={{
+          width:"100%",padding:"14px",marginTop:6,marginBottom:2,
+          background:"#e8003d",border:"none",borderRadius:12,
+          fontFamily:"Montserrat,sans-serif",fontSize:"13px",fontWeight:700,
+          color:"#fff",cursor:"pointer",letterSpacing:"0.5px",
+        }}>🍁 Subscribe on Patreon →</button>
+
+        <div style={{textAlign:"center",marginTop:14}}>
+          <div style={{fontSize:"11px",color:"rgba(255,255,255,0.3)",marginBottom:8}}>
+            Already a Patreon member?
+          </div>
+          <button onClick={()=>{window.location.href=PATREON_LOGIN;}} style={{
+            width:"100%",padding:"10px",
+            background:"transparent",border:"1px solid rgba(255,255,255,0.15)",
+            borderRadius:10,color:"rgba(255,255,255,0.6)",
+            fontFamily:"Montserrat,sans-serif",fontSize:"11px",fontWeight:600,
+            cursor:"pointer",letterSpacing:"0.5px",
+          }}>LOGIN WITH PATREON</button>
+        </div>
+
+        <button onClick={onClose} style={{
+          marginTop:12,width:"100%",padding:"10px",
+          background:"transparent",border:"none",
+          color:"rgba(255,255,255,0.25)",fontSize:"12px",cursor:"pointer",
+        }}>Maybe later</button>
+      </div>
+    </div>
+  );
+}
+
 function clamp(n, min, max) { return Math.max(min, Math.min(max, n)); }
 function computeSap(minC, maxC, solar) {
   const ft = minC < 0 && maxC > 0 ? 40 : 0;
@@ -349,7 +441,8 @@ export default function App() {
   const [cityQuery, setCityQuery] = useState("");
   const [cityResults, setCityResults] = useState([]);
   const searchTimer = useRef(null);
-  const [rows, setRows] = useState([]);
+  const [showUpsell, setShowUpsell] = useState(false);
+  const openUpsell = () => setShowUpsell(true);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [member, setMember] = useState(null);
@@ -421,6 +514,7 @@ export default function App() {
     <>
       <style>{css}</style>
       <div className="app">
+        {showUpsell && <UpsellModal onClose={()=>setShowUpsell(false)} currentTier={tierRank}/>}
 
         <div className="hdr">
           <div className="brand">Backcountry Princess</div>
@@ -460,27 +554,44 @@ export default function App() {
               {authLoading?"Checking…":member?.loggedIn?member.tierLabel:"Not logged in"}
             </span>
           </div>
-          <button className="btn-login" onClick={()=>window.location.href="/patreon/login.php"} type="button">
-            {member?.loggedIn?"Manage on Patreon":"Login with Patreon"}
-          </button>
-          <button className="btn-ghost" onClick={refreshPatreon} type="button">↻ Refresh status</button>
+          {member?.loggedIn ? (
+            <>
+              <button className="btn-login" onClick={()=>window.open(PATREON_MANAGE,"_blank")} type="button">
+                Manage Membership on Patreon ↗
+              </button>
+              <button className="btn-ghost" onClick={refreshPatreon} type="button">↻ Refresh status</button>
+            </>
+          ) : (
+            <>
+              <button className="btn-login" onClick={openUpsell} type="button">
+                🍁 Get More Maple
+              </button>
+              <button className="btn-ghost" onClick={()=>window.location.href=PATREON_LOGIN} type="button">
+                Already a member? Login with Patreon
+              </button>
+            </>
+          )}
         </div>
 
         {/* TIER CARDS */}
         <div className="sec">
           <div className="sec-lbl">Plans</div>
           <div className="tier-grid">
-            <div className={`tc tc-watch ${tierRank<1?"dimmed":""}`}>
-              <div className="tc-status">{tierRank>=1?"✓ Active":"Locked"}</div>
+            <div className={`tc tc-watch ${tierRank<1?"dimmed":""}`}
+              onClick={tierRank<1?openUpsell:undefined}
+              style={{cursor:tierRank<1?"pointer":"default"}}>
+              <div className="tc-status">{tierRank>=1?"✓ Active":"🔒 Locked"}</div>
               <div className="tc-name">Watch</div><div className="tc-price">$10/mo</div>
               <div className="tc-feat">7-day sap<br/>dots only</div>
             </div>
-            <div className={`tc tc-planner ${tierRank<2?"dimmed":""}`}>
-              <div className="tc-status">{tierRank>=2?"✓ Active":"Locked"}</div>
+            <div className={`tc tc-planner ${tierRank<2?"dimmed":""}`}
+              onClick={tierRank<2?openUpsell:undefined}
+              style={{cursor:tierRank<2?"pointer":"default"}}>
+              <div className="tc-status">{tierRank>=2?"✓ Active":"🔒 Locked"}</div>
               <div className="tc-name">Planner</div><div className="tc-price">$25/mo</div>
               <div className="tc-feat">Full rings<br/>+ candles</div>
             </div>
-            <div className="tc tc-pro dimmed">
+            <div className="tc tc-pro dimmed" onClick={openUpsell} style={{cursor:"pointer"}}>
               <div className="tc-status">Coming Soon</div>
               <div className="tc-name">Pro</div><div className="tc-price">$50/mo</div>
               <div className="tc-feat">Analytics<br/>+ history</div>
@@ -554,8 +665,8 @@ export default function App() {
                     );
                   })}
                 </div>
-                <div style={{marginTop:"12px"}}>
-                  <div className="upsell">🍁 <strong>Want temp, solar & candle charts?</strong> Upgrade to <strong>Planner ($25/mo)</strong>. <a onClick={()=>window.location.href="/patreon/login.php"}>Subscribe →</a></div>
+                <div style={{marginTop:"12px"}} onClick={openUpsell} style={{cursor:"pointer"}}>
+                  <div className="upsell">🍁 <strong>Want temp, solar & candle charts?</strong> Upgrade to <strong>Planner ($25/mo)</strong>. <a>Subscribe →</a></div>
                 </div>
               </>
             )}
@@ -583,7 +694,7 @@ export default function App() {
                     <div className="stat-box"><div className="stat-val" style={{color:"#fca5a5"}}>{today.maxC.toFixed(1)}°</div><div className="stat-lbl">Max</div></div>
                     <div className="stat-box"><div className="stat-val" style={{color:"#fde68a"}}>{today.solar.toFixed(1)}</div><div className="stat-lbl">kWh/m²</div></div>
                   </div>
-                  <div className="upsell">🍁 <strong>Plan your whole week.</strong> <strong>Watch ($10/mo)</strong> for 7-day dots · <strong>Planner ($25/mo)</strong> for full details + candle charts. <a onClick={()=>window.location.href="/patreon/login.php"}>Subscribe →</a></div>
+                  <div className="upsell" onClick={openUpsell} style={{cursor:"pointer"}}>🍁 <strong>Plan your whole week.</strong> <strong>Watch ($10/mo)</strong> for 7-day dots · <strong>Planner ($25/mo)</strong> for full details + candle charts. <a>Subscribe →</a></div>
                 </>
               );
             })()}
