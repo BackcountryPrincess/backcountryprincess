@@ -415,6 +415,7 @@ export default function App() {
   const searchTimer = useRef(null);
   const [showUpsell, setShowUpsell] = useState(false);
   const openUpsell = () => setShowUpsell(true);
+  const [rows, setRows] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [member, setMember] = useState(null);
@@ -634,7 +635,7 @@ export default function App() {
                   })}
                 </div>
                 <div style={{marginTop:"12px",cursor:"pointer"}} onClick={openUpsell}>
-                  <div className="upsell">🍁 <strong>Want temp, solar & candle charts?</strong> Upgrade to <strong>Planner ($25/mo)</strong>. <a>Subscribe →</a></div>
+                  <div className="upsell">🍁 <strong>Want temp, solar + candle charts?</strong> Upgrade to <strong>Planner ($25/mo)</strong>. <a>Subscribe →</a></div>
                 </div>
               </>
             )}
