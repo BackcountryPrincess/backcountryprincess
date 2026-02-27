@@ -293,10 +293,7 @@ const css = `
   .tc-feat{font-size:9px;line-height:1.6;}
   .tc-watch .tc-feat{color:rgba(147,197,253,0.75);} .tc-planner .tc-feat{color:rgba(216,180,254,0.75);} .tc-pro .tc-feat{color:rgba(203,213,225,0.55);}
 
-  .dev-bar{display:flex;align-items:center;gap:5px;padding:7px 18px;background:rgba(255,200,0,0.04);border-bottom:1px solid rgba(255,200,0,0.1);}
-  .dev-lbl{font-size:9px;color:rgba(255,200,0,0.4);font-family:'Montserrat',sans-serif;letter-spacing:1px;margin-right:3px;}
-  .dev-btn{flex:1;padding:5px 3px;border-radius:7px;border:1px solid rgba(255,200,0,0.2);background:transparent;color:rgba(255,200,0,0.35);font-size:10px;cursor:pointer;font-family:'Montserrat',sans-serif;font-weight:600;}
-  .dev-btn.on{background:rgba(255,200,0,0.12);color:#fbbf24;border-color:#fbbf24;}
+
 
   /* WEEK SECTION */
   .week-sec{padding:14px 18px 20px;border-bottom:1px solid rgba(255,255,255,0.06);}
@@ -357,17 +354,13 @@ export default function App() {
   const [error, setError] = useState("");
   const [member, setMember] = useState(null);
   const [authLoading, setAuthLoading] = useState(true);
-  const [forceTier, setForceTier] = useState(null); // null = real Patreon rank
-
-  const realRank = (() => {
+  const tierRank = (() => {
     if (!member?.loggedIn) return 0;
     if (member.tierKey === "SAP_PRO")     return 3;
     if (member.tierKey === "SAP_PLANNER") return 2;
     if (member.tierKey === "SAP_WATCH")   return 1;
     return 0;
   })();
-
-  const tierRank = forceTier !== null ? forceTier : realRank;
 
   function handleCityInput(e) {
     const q = e.target.value; setCityQuery(q);
@@ -434,13 +427,7 @@ export default function App() {
           <div className="title">Maple <em>Sap</em> Predictor</div>
         </div>
 
-        <div className="dev-bar">
-          <span className="dev-lbl">DEV</span>
-          <button className={`dev-btn ${forceTier===null?"on":""}`} onClick={()=>setForceTier(null)}>Live</button>
-          {["Free","Watch","Planner"].map((lbl,i) => (
-            <button key={i} className={`dev-btn ${forceTier===i?"on":""}`} onClick={()=>setForceTier(i)}>{lbl}</button>
-          ))}
-        </div>
+
 
         {/* LOCATION */}
         <div className="sec">
