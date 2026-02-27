@@ -19,18 +19,20 @@ jobs:
           node-version: 20
 
       - name: Install dependencies
+        working-directory: src
         run: npm install
 
       - name: Build
+        working-directory: src
         run: npm run build
 
-      - name: Deploy to GreenGeeks via SSH
+      - name: Deploy dist to GreenGeeks
         uses: appleboy/scp-action@v0.1.7
         with:
           host: mtl201.greengeeks.net
           username: va2omg7uajaq
           key: ${{ secrets.GREENGEEKS_SSH_KEY }}
-          source: "dist/*"
+          source: "src/dist/*"
           target: /home/va2omg7uajaq/public_html/maple.backcountryprincess.com/
-          strip_components: 1
+          strip_components: 2
           rm: false
