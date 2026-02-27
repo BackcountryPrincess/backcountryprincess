@@ -26,13 +26,17 @@ jobs:
         working-directory: src
         run: npm run build
 
-      - name: Deploy dist to GreenGeeks
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: mtl201.greengeeks.net
-          username: va2omg7uajaq
-          key: ${{ secrets.GREENGEEKS_SSH_KEY }}
-          source: "src/dist/*"
-          target: /home/va2omg7uajaq/public_html/maple.backcountryprincess.com/
-          strip_components: 2
-          rm: false
+      - name: Setup SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.GREENGEEKS_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -p 22 mtl201.greengeeks.net >> ~/.ssh/known_hosts
+
+      - name: Deploy via rsync
+        run: |
+          rsync -avz --delete \
+            --exclude 'patreon/' \
+            -e "ssh -i ~/.ssh/deploy_key -p 22" \
+            src/dist/ \
+            va2omg7uajaq@mtl201.greengeeks.net:/home/va2omg7uajaq/public_html/maple.backcountryprincess.com/
