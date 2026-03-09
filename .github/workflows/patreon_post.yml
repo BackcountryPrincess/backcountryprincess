@@ -1,0 +1,24 @@
+name: Patreon to Social Media
+
+on:
+  repository_dispatch:
+    types: [patreon_new_post]
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - run: pip install -r requirements.txt
+      - name: Post to Facebook and Instagram
+        env:
+          FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
+          FB_ACCESS_TOKEN: ${{ secrets.FB_ACCESS_TOKEN }}
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          POST_TITLE: ${{ github.event.client_payload.title }}
+          POST_URL: ${{ github.event.client_payload.url }}
+          POST_IMAGE: ${{ github.event.client_payload.image }}
+        run: python post_to_social.py
