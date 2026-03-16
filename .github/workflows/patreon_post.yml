@@ -1,6 +1,20 @@
 name: Patreon to Social Media
 
 on:
+  workflow_dispatch:
+    inputs:
+      post_title:
+        description: "Post title"
+        required: true
+        default: "Proclamation"
+      post_url:
+        description: "Patreon URL"
+        required: true
+        default: "https://www.patreon.com/posts/proclamation-153173283"
+      post_image:
+        description: "Public image URL for Instagram (optional)"
+        required: false
+        default: ""
   repository_dispatch:
     types: [patreon_new_post]
 
@@ -8,17 +22,23 @@ jobs:
   post:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
-      - run: pip install -r .github/workflows/requirements.txt
-      - name: Post to Facebook and Instagram
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r .github/workflows/requirements.txt
+
+      - name: Run social post script
         env:
           FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
           FB_ACCESS_TOKEN: ${{ secrets.FB_ACCESS_TOKEN }}
           IG_USER_ID: ${{ secrets.IG_USER_ID }}
-          POST_TITLE: ${{ github.event.client_payload.title }}
-          POST_URL: ${{ github.event.client_payload.url }}
-          POST_IMAGE: ${{ github.event.client_payload.image }}
+          POST_TITLE: ${{ github.event.inputs.post_title || github.event.client_payload.title }}
+          POST_URL: ${{ github.event.inputs.post_url || github.event.client_payload.url }}
+          POST_IMAGE: ${{ github.event.inputs.post_image || github.event.client_payload.image }}
         run: python .github/workflows/post_to_social.py
