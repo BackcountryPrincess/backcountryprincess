@@ -1,39 +1,10 @@
 name: Build dist.zip (Vite)
 
 on:
-  push:
-    branches: ["main"]
   workflow_dispatch:
 
 jobs:
-  build:
+  disabled:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Use Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - name: Install deps
-        working-directory: src
-        run: npm install
-
-      - name: Build
-        working-directory: src
-        run: npm run build
-
-      - name: Create dist.zip
-        working-directory: src
-        run: |
-          cd dist
-          zip -r ../dist.zip .
-
-      - name: Upload dist.zip artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: dist-zip
-          path: src/dist.zip
+      - run: echo "Disabled for now while Patreon social posting is being fixed."
