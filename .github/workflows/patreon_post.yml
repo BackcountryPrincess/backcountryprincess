@@ -8,11 +8,11 @@ jobs:
   post:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - run: pip install -r requirements.txt
+      - run: pip install -r .github/workflows/requirements.txt
       - name: Post to Facebook and Instagram
         env:
           FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
@@ -21,4 +21,4 @@ jobs:
           POST_TITLE: ${{ github.event.client_payload.title }}
           POST_URL: ${{ github.event.client_payload.url }}
           POST_IMAGE: ${{ github.event.client_payload.image }}
-        run: python post_to_social.py
+        run: python .github/workflows/post_to_social.py
