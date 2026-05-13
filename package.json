@@ -1,0 +1,16 @@
+{
+  "name": "maplesap",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "node scripts/build-env.mjs && wrangler deploy --dry-run",
+    "dev": "node scripts/build-env.mjs && wrangler dev --local --port 8787",
+    "deploy": "node scripts/build-env.mjs && wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "^4.90.0"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.105.4"
+  }
+}

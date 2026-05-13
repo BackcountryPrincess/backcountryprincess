@@ -1,0 +1,212 @@
+.maplesap-auth-nav {
+  position: fixed;
+  right: 18px;
+  top: 18px;
+  z-index: 9999;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+  max-width: calc(100vw - 36px);
+  font-family: Inter, Montserrat, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.maplesap-auth-link,
+.maplesap-auth-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  padding: 10px 14px;
+  border: 1px solid rgba(200, 115, 26, 0.36);
+  border-radius: 999px;
+  background: rgba(19, 18, 14, 0.78);
+  color: #f4ead0 !important;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  text-transform: uppercase;
+  text-decoration: none;
+  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.22);
+  backdrop-filter: blur(14px);
+  cursor: pointer;
+  transition: border-color 160ms ease, background 160ms ease, color 160ms ease;
+}
+
+.maplesap-auth-link.primary,
+.maplesap-auth-button.primary {
+  background: #c8731a;
+  border-color: #e59a42;
+  color: #17120a !important;
+}
+
+.maplesap-auth-link:hover,
+.maplesap-auth-button:hover {
+  border-color: #f4b86f;
+  background: rgba(32, 27, 19, 0.92);
+}
+
+.maplesap-auth-shell {
+  min-height: 100vh;
+  padding: 96px 20px 48px;
+  background:
+    radial-gradient(circle at top right, rgba(200, 115, 26, 0.2), transparent 34%),
+    linear-gradient(135deg, #140f08, #21160c 46%, #0f130d);
+  color: #f4ead0;
+  font-family: Inter, Montserrat, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+.maplesap-auth-panel,
+.maplesap-dashboard-panel {
+  width: min(980px, 100%);
+  margin: 0 auto;
+  border: 1px solid rgba(244, 184, 111, 0.2);
+  border-radius: 22px;
+  background: rgba(13, 11, 8, 0.68);
+  box-shadow: 0 22px 70px rgba(0, 0, 0, 0.34);
+  backdrop-filter: blur(18px);
+}
+
+.maplesap-auth-panel {
+  max-width: 520px;
+  padding: 28px;
+}
+
+.maplesap-dashboard-panel {
+  padding: 30px;
+}
+
+.maplesap-kicker {
+  margin: 0 0 10px;
+  color: #c8731a;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.maplesap-auth-panel h1,
+.maplesap-dashboard-panel h1 {
+  margin: 0 0 12px;
+  color: #fff7e8;
+  font-size: clamp(30px, 5vw, 48px);
+  line-height: 1.04;
+}
+
+.maplesap-muted {
+  color: rgba(244, 234, 208, 0.72);
+  line-height: 1.7;
+}
+
+.maplesap-auth-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin: 24px 0;
+}
+
+.maplesap-auth-tab {
+  border: 1px solid rgba(244, 184, 111, 0.2);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  color: #f4ead0;
+  cursor: pointer;
+}
+
+.maplesap-auth-tab.active {
+  background: rgba(200, 115, 26, 0.24);
+  border-color: rgba(244, 184, 111, 0.46);
+}
+
+.maplesap-auth-form {
+  display: grid;
+  gap: 14px;
+}
+
+.maplesap-auth-form[hidden] {
+  display: none;
+}
+
+.maplesap-auth-form label {
+  display: grid;
+  gap: 6px;
+  color: rgba(244, 234, 208, 0.82);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.maplesap-auth-form input {
+  width: 100%;
+  min-height: 46px;
+  border: 1px solid rgba(244, 184, 111, 0.22);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff7e8;
+  padding: 11px 13px;
+}
+
+.maplesap-auth-form button,
+.maplesap-dashboard-action {
+  min-height: 46px;
+  border: 0;
+  border-radius: 999px;
+  background: #c8731a;
+  color: #17120a;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.maplesap-auth-secondary {
+  border: 0;
+  background: transparent;
+  color: #f4b86f;
+  font-weight: 800;
+  cursor: pointer;
+  text-align: left;
+}
+
+.maplesap-auth-status {
+  min-height: 24px;
+  color: #f4b86f;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.maplesap-dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 24px;
+}
+
+.maplesap-dashboard-card {
+  min-height: 150px;
+  border: 1px solid rgba(244, 184, 111, 0.16);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.045);
+  padding: 18px;
+}
+
+.maplesap-dashboard-card h2 {
+  margin: 0 0 10px;
+  color: #fff7e8;
+  font-size: 18px;
+}
+
+@media (max-width: 760px) {
+  .maplesap-auth-nav {
+    left: 12px;
+    right: 12px;
+    top: 12px;
+  }
+
+  .maplesap-auth-link,
+  .maplesap-auth-button {
+    flex: 1 1 auto;
+  }
+
+  .maplesap-dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}

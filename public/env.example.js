@@ -1,0 +1,4 @@
+window.MAPLESAP_ENV = {
+  supabaseUrl: "https://your-project.supabase.co",
+  supabaseAnonKey: "your-public-anon-key"
+};
