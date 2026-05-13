@@ -19,11 +19,9 @@ jobs:
           node-version: 20
 
       - name: Install dependencies
-        working-directory: src
-        run: npm install
+        run: npm ci
 
       - name: Build
-        working-directory: src
         run: npm run build
 
       - name: Setup SSH key
@@ -38,5 +36,5 @@ jobs:
           rsync -avz --delete \
             --exclude 'patreon/' \
             -e "ssh -i ~/.ssh/deploy_key -p 22" \
-            src/dist/ \
+            public/ \
             va2omg7uajaq@mtl201.greengeeks.net:/home/va2omg7uajaq/public_html/maple.backcountryprincess.com/
