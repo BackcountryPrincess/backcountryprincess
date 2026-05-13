@@ -22,7 +22,7 @@ jobs:
         run: npm ci
 
       - name: Build
-        run: npm run build
+        run: node scripts/build-env.mjs
 
       - name: Setup SSH key
         run: |
