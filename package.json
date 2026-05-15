@@ -2,6 +2,7 @@
   "name": "maplesap",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "build": "node scripts/build-env.mjs && wrangler deploy --dry-run",
     "dev": "node scripts/build-env.mjs && wrangler dev --local --port 8787",

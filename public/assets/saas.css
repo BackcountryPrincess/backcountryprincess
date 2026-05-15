@@ -210,3 +210,64 @@
     grid-template-columns: 1fr;
   }
 }
+
+.maplesap-feedback {
+  background: #17120a;
+  color: #fff7e8;
+  padding: 40px 18px;
+}
+
+.maplesap-feedback-inner {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.maplesap-feedback h2 {
+  margin: 0 0 16px;
+  color: #fff7e8;
+  font-size: clamp(24px, 4vw, 34px);
+}
+
+.maplesap-feedback form {
+  display: grid;
+  gap: 14px;
+}
+
+.maplesap-feedback label {
+  display: grid;
+  gap: 6px;
+  color: rgba(244, 234, 208, 0.84);
+  font-weight: 800;
+}
+
+.maplesap-feedback input,
+.maplesap-feedback textarea {
+  width: 100%;
+  min-height: 46px;
+  border: 1px solid rgba(244, 184, 111, 0.24);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff7e8;
+  padding: 11px 13px;
+}
+
+.maplesap-feedback textarea {
+  min-height: 130px;
+  resize: vertical;
+}
+
+.maplesap-feedback button {
+  min-height: 46px;
+  border: 0;
+  border-radius: 999px;
+  background: #c8731a;
+  color: #17120a;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+#maplesap-feedback-status {
+  min-height: 24px;
+  color: #f4b86f;
+  font-weight: 800;
+}
