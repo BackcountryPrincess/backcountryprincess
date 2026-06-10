@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Privacy Policy | MapleSAP</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0e1209;
+      --surface: #141810;
+      --card: rgba(255,255,255,0.045);
+      --border: rgba(244,184,111,0.15);
+      --amber: #c8731a;
+      --amber-lt: #f4b86f;
+      --green-lt: #6ec98a;
+      --text: #fff7e8;
+      --muted: rgba(244,234,208,0.62);
+      --radius: 16px;
+    }
+
+    html { background: var(--bg); }
+
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 15% 0%, rgba(200,115,26,0.20) 0%, transparent 38%),
+        radial-gradient(circle at 85% 100%, rgba(61,155,90,0.08) 0%, transparent 38%),
+        var(--bg);
+      color: var(--text);
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      padding: 0 0 80px;
+    }
+
+    /* ── Header ─────────────────────────────────────────────────────────── */
+    .doc-header {
+      padding: 56px 24px 40px;
+      max-width: 760px;
+      margin: 0 auto;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 40px;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--amber-lt);
+      text-decoration: none;
+      margin-bottom: 28px;
+      opacity: 0.7;
+      transition: opacity 150ms;
+    }
+    .back-link:hover { opacity: 1; }
+
+    .app-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--amber-lt);
+      margin-bottom: 18px;
+    }
+    .app-badge::before {
+      content: '🍁';
+      font-size: 14px;
+    }
+
+    h1 {
+      font-size: clamp(28px, 5vw, 44px);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 1.06;
+      color: var(--text);
+      margin-bottom: 14px;
+    }
+
+    .effective {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+    .effective strong { color: var(--amber-lt); font-weight: 700; }
+
+    /* ── Body ────────────────────────────────────────────────────────────── */
+    .doc-body {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Section */
+    .section {
+      margin-bottom: 36px;
+    }
+
+    h2 {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--amber-lt);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(244,184,111,0.12);
+    }
+
+    h3 {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 10px;
+      letter-spacing: -0.01em;
+    }
+
+    p {
+      font-size: 15px;
+      line-height: 1.75;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+
+    p:last-child { margin-bottom: 0; }
+
+    ul {
+      list-style: none;
+      margin-bottom: 14px;
+    }
+
+    ul li {
+      font-size: 15px;
+      line-height: 1.7;
+      color: var(--muted);
+      padding: 4px 0 4px 22px;
+      position: relative;
+    }
+
+    ul li::before {
+      content: '–';
+      position: absolute;
+      left: 0;
+      color: var(--amber-lt);
+      opacity: 0.6;
+    }
+
+    /* Callout / highlight block */
+    .callout {
+      background: rgba(200,115,26,0.07);
+      border: 1px solid rgba(244,184,111,0.18);
+      border-radius: 12px;
+      padding: 16px 18px;
+      margin-bottom: 14px;
+    }
+
+    .callout.green {
+      background: rgba(61,155,90,0.07);
+      border-color: rgba(110,201,138,0.2);
+    }
+
+    .callout p {
+      font-size: 14px;
+      margin: 0;
+    }
+
+    .callout strong { color: var(--amber-lt); }
+    .callout.green strong { color: var(--green-lt); }
+
+    /* Contact block */
+    .contact-block {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-top: 8px;
+    }
+
+    .contact-block p { margin-bottom: 8px; }
+    .contact-block a { color: var(--amber-lt); font-weight: 700; text-decoration: none; }
+    .contact-block a:hover { text-decoration: underline; }
+
+    /* Footer */
+    .doc-footer {
+      max-width: 760px;
+      margin: 56px auto 0;
+      padding: 24px 24px 0;
+      border-top: 1px solid rgba(255,255,255,0.07);
+      font-size: 12px;
+      color: rgba(244,234,208,0.3);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .doc-footer a { color: rgba(244,184,111,0.45); text-decoration: none; }
+    .doc-footer a:hover { color: var(--amber-lt); }
+  </style>
+</head>
+<body>
+
+  <div class="doc-header">
+    <a href="/privacy/" class="back-link">← All Privacy Policies</a>
+    <div class="app-badge">MapleSAP</div>
+    <h1>Privacy Policy</h1>
+    <p class="effective">Effective Date: <strong>June 10, 2026</strong></p>
+  </div>
+
+  <div class="doc-body">
+
+    <!-- 1. Overview -->
+    <div class="section">
+      <h2>1 — Overview</h2>
+      <h3>Who We Are</h3>
+      <p>
+        MapleSAP is a mobile application developed by Smokey River Studio, a Canadian software studio.
+        MapleSAP provides weather-informed forecasting tools to help maple syrup producers plan their
+        tapping and harvest activities.
+      </p>
+      <p>
+        This policy explains what personal information we collect, why we collect it, how we use it,
+        and the choices you have regarding your data. We comply with the
+        <em>Personal Information Protection and Electronic Documents Act</em> (PIPEDA) and applicable
+        provincial privacy legislation.
+      </p>
+      <div class="callout green">
+        <p><strong>Plain English:</strong> We collect the minimum information necessary to deliver the service.
+        We do not sell your data. We do not use your information for advertising.</p>
+      </div>
+    </div>
+
+    <!-- 2. Account Information -->
+    <div class="section">
+      <h2>2 — Account Information</h2>
+      <h3>What We Collect</h3>
+      <p>To create and manage your MapleSAP account, we collect:</p>
+      <ul>
+        <li>Email address (used for sign-in and service communications)</li>
+        <li>Password (stored as a one-way cryptographic hash — never in plain text)</li>
+        <li>Account creation date and last login timestamp</li>
+        <li>Subscription tier (Free or Pro)</li>
+      </ul>
+      <h3>Why We Collect It</h3>
+      <p>
+        Account information is required to authenticate you, associate your sugar bush locations
+        with your profile, and deliver features tied to your subscription plan.
+      </p>
+      <h3>What We Do Not Collect</h3>
+      <ul>
+        <li>Your legal name or mailing address (not required)</li>
+        <li>Phone number (not required)</li>
+        <li>Government-issued identification</li>
+      </ul>
+    </div>
+
+    <!-- 3. Location Data -->
+    <div class="section">
+      <h2>3 — Location Data</h2>
+      <h3>Device GPS</h3>
+      <p>
+        MapleSAP may request access to your device location to identify your nearest weather
+        station and deliver region-specific sap forecasts. Location access is optional — you may
+        enter a location manually instead.
+      </p>
+      <p>
+        We request location access only while the app is in use (<em>when-in-use</em> permission).
+        We do not request background location access.
+      </p>
+      <h3>Sugar Bush Locations</h3>
+      <p>
+        When you add a sugar bush to your account, you may provide GPS coordinates or a named
+        location. This information is stored on our servers associated with your account and is
+        used exclusively to:
+      </p>
+      <ul>
+        <li>Deliver localized forecasts for that bush</li>
+        <li>Display your bush locations within the app</li>
+        <li>Calculate seasonal statistics for your property</li>
+      </ul>
+      <p>Sugar bush location data is never shared, sold, or used to infer unrelated personal information.</p>
+    </div>
+
+    <!-- 4. Forecast Data -->
+    <div class="section">
+      <h2>4 — Forecast &amp; Weather Data</h2>
+      <p>
+        Forecast data (temperature, solar radiation, freeze/thaw cycle predictions) is sourced from
+        third-party meteorological services. When you request a forecast, we transmit your region
+        or coordinates to our weather data provider. We do not transmit your account identity
+        alongside location queries.
+      </p>
+      <p>
+        Forecast results are cached on our servers to reduce redundant API calls and improve
+        performance. Cached forecast data is not linked to identifiable user records beyond your
+        region of interest.
+      </p>
+    </div>
+
+    <!-- 5. Notifications -->
+    <div class="section">
+      <h2>5 — Push Notifications</h2>
+      <p>
+        MapleSAP may send push notifications to alert you to sap-run conditions, freeze/thaw
+        events, and season-ending warm streaks. Push notification delivery requires a device
+        push token, which is stored on our servers associated with your account.
+      </p>
+      <p>
+        You can disable push notifications at any time through your device's notification settings
+        or within the MapleSAP app. Disabling notifications does not affect your ability to use
+        the app.
+      </p>
+    </div>
+
+    <!-- 6. Subscription Services -->
+    <div class="section">
+      <h2>6 — Subscription Services</h2>
+      <p>
+        MapleSAP offers a paid Pro subscription. Subscription management is handled through the
+        platform's native billing system:
+      </p>
+      <ul>
+        <li><strong>iOS:</strong> Apple App Store (StoreKit in-app purchase)</li>
+        <li><strong>Android:</strong> Google Play Billing</li>
+      </ul>
+      <p>
+        We do not directly handle or store your payment card details. All billing transactions
+        occur through Apple or Google's payment infrastructure, subject to their respective
+        privacy policies.
+      </p>
+      <p>
+        We receive confirmation of your subscription status (active, expired, cancelled) and your
+        subscription tier. We do not receive your card number, bank details, or billing address.
+      </p>
+    </div>
+
+    <!-- 7. Analytics -->
+    <div class="section">
+      <h2>7 — Analytics</h2>
+      <p>
+        We may collect aggregated, non-identifying analytics to understand how the app is used and
+        to improve reliability. This may include:
+      </p>
+      <ul>
+        <li>Feature usage frequency (which screens are visited, which features are used)</li>
+        <li>Crash reports and error logs</li>
+        <li>App version and device OS version</li>
+        <li>General region (country/province — not precise GPS)</li>
+      </ul>
+      <p>
+        Analytics data is aggregated and not linked to your identity. We do not use analytics to
+        build advertising profiles or share data with ad networks.
+      </p>
+    </div>
+
+    <!-- 8. Data Retention -->
+    <div class="section">
+      <h2>8 — Data Retention</h2>
+      <p>
+        We retain your account and associated data for as long as your account is active or as
+        needed to provide the service. Specifically:
+      </p>
+      <ul>
+        <li><strong>Account data:</strong> Retained until you delete your account</li>
+        <li><strong>Sugar bush locations:</strong> Deleted when you remove them or delete your account</li>
+        <li><strong>Forecast cache:</strong> Automatically purged after 48 hours</li>
+        <li><strong>Push tokens:</strong> Removed when you log out or uninstall the app</li>
+        <li><strong>Crash logs:</strong> Automatically deleted after 90 days</li>
+      </ul>
+      <p>
+        When you delete your account, we permanently delete your email address, sugar bush locations,
+        and all associated data within 30 days. Anonymized aggregate data (e.g., "users in Ontario")
+        is not deleted, as it contains no personal identifiers.
+      </p>
+    </div>
+
+    <!-- 9. User Rights -->
+    <div class="section">
+      <h2>9 — Your Rights (PIPEDA)</h2>
+      <p>
+        As a Canadian resident, you have rights under PIPEDA and applicable provincial legislation.
+        You have the right to:
+      </p>
+      <ul>
+        <li><strong>Access:</strong> Request a copy of the personal information we hold about you</li>
+        <li><strong>Correction:</strong> Request correction of inaccurate or incomplete information</li>
+        <li><strong>Deletion:</strong> Request deletion of your account and personal data</li>
+        <li><strong>Withdraw consent:</strong> Withdraw consent to optional data uses (e.g., analytics)</li>
+        <li><strong>Portability:</strong> Request your data in a portable format</li>
+        <li><strong>Complaint:</strong> Lodge a complaint with the Office of the Privacy Commissioner of Canada</li>
+      </ul>
+      <p>To exercise any of these rights, contact us at the address below.</p>
+    </div>
+
+    <!-- 10. Third-Party Services -->
+    <div class="section">
+      <h2>10 — Third-Party Services</h2>
+      <p>MapleSAP integrates with the following third-party services:</p>
+      <ul>
+        <li><strong>Weather data provider</strong> — receives region/coordinates to return forecast data</li>
+        <li><strong>Apple App Store / Google Play</strong> — handles in-app subscriptions and billing</li>
+        <li><strong>Apple Push Notification Service / Firebase Cloud Messaging</strong> — delivers push notifications</li>
+        <li><strong>Cloudflare</strong> — CDN and hosting infrastructure (processes request metadata)</li>
+      </ul>
+      <p>
+        We select service providers that meet our privacy and security standards. We do not share
+        personal information with third-party advertising networks, data brokers, or analytics
+        platforms that build individual user profiles.
+      </p>
+    </div>
+
+    <!-- 11. Children -->
+    <div class="section">
+      <h2>11 — Children's Privacy</h2>
+      <p>
+        MapleSAP is not directed at children under the age of 13. We do not knowingly collect
+        personal information from children. If you believe we have inadvertently collected information
+        from a child, please contact us immediately and we will delete it promptly.
+      </p>
+    </div>
+
+    <!-- 12. Changes -->
+    <div class="section">
+      <h2>12 — Changes to This Policy</h2>
+      <p>
+        We may update this Privacy Policy from time to time. When we make material changes, we will
+        notify you via the app or by email. The updated policy will be posted at this URL with a
+        revised effective date. Continued use of MapleSAP after changes take effect constitutes
+        acceptance of the updated policy.
+      </p>
+    </div>
+
+    <!-- 13. Contact -->
+    <div class="section">
+      <h2>13 — Contact Us</h2>
+      <p>For privacy questions, data requests, or account deletion, contact:</p>
+      <div class="contact-block">
+        <p><strong style="color:#f4ead0">Smokey River Studio</strong></p>
+        <p>Privacy Officer · MapleSAP</p>
+        <p>📧 <a href="mailto:privacy@smokeyriverstudio.ca">privacy@smokeyriverstudio.ca</a></p>
+        <p style="margin-top:12px;font-size:13px;color:rgba(244,234,208,0.45)">
+          We will respond to privacy requests within 30 days as required by PIPEDA.
+        </p>
+      </div>
+    </div>
+
+  </div><!-- /doc-body -->
+
+  <div class="doc-footer">
+    <span>© 2026 Smokey River Studio · MapleSAP Privacy Policy · Effective June 10, 2026</span>
+    <a href="/privacy/">← All Policies</a>
+  </div>
+
+</body>
+</html>

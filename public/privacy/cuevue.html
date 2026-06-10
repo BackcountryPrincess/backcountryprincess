@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en-CA">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Privacy Policy | CueVue</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #08090b;
+      --panel: #12151a;
+      --glass: rgba(255,255,255,0.055);
+      --line: rgba(255,255,255,0.12);
+      --text: #f7f2e8;
+      --muted: #aab1ad;
+      --accent: #ff8768;
+      --teal: #9bd6d3;
+      --radius: 16px;
+    }
+
+    html { background: var(--bg); }
+
+    body {
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 20% 5%, rgba(255,135,104,0.15) 0%, transparent 38%),
+        radial-gradient(circle at 85% 95%, rgba(155,214,211,0.10) 0%, transparent 38%),
+        var(--bg);
+      color: var(--text);
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      padding: 0 0 80px;
+    }
+
+    /* ── Header ─────────────────────────────────────────────────────────── */
+    .doc-header {
+      padding: 56px 24px 40px;
+      max-width: 760px;
+      margin: 0 auto;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 40px;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      text-decoration: none;
+      margin-bottom: 28px;
+      opacity: 0.7;
+      transition: opacity 150ms;
+    }
+    .back-link:hover { opacity: 1; }
+
+    .app-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 18px;
+    }
+    .badge-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 12px var(--accent);
+    }
+
+    h1 {
+      font-size: clamp(28px, 5vw, 44px);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 1.06;
+      color: var(--text);
+      margin-bottom: 14px;
+    }
+
+    .effective {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+    .effective strong { color: var(--teal); font-weight: 700; }
+
+    /* ── Body ────────────────────────────────────────────────────────────── */
+    .doc-body {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .section { margin-bottom: 36px; }
+
+    h2 {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(255,135,104,0.15);
+    }
+
+    h3 {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 10px;
+      letter-spacing: -0.01em;
+    }
+
+    p {
+      font-size: 15px;
+      line-height: 1.75;
+      color: var(--muted);
+      margin-bottom: 14px;
+    }
+    p:last-child { margin-bottom: 0; }
+
+    ul { list-style: none; margin-bottom: 14px; }
+    ul li {
+      font-size: 15px;
+      line-height: 1.7;
+      color: var(--muted);
+      padding: 4px 0 4px 22px;
+      position: relative;
+    }
+    ul li::before {
+      content: '–';
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+      opacity: 0.6;
+    }
+
+    /* Permission block */
+    .perm-block {
+      background: var(--glass);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 20px 20px 16px;
+      margin-bottom: 16px;
+    }
+
+    .perm-block h3 {
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .perm-icon {
+      font-size: 20px;
+      line-height: 1;
+    }
+
+    .perm-block p { font-size: 14px; margin-bottom: 8px; }
+    .perm-block p:last-child { margin-bottom: 0; }
+
+    /* Callout */
+    .callout {
+      background: rgba(155,214,211,0.07);
+      border: 1px solid rgba(155,214,211,0.2);
+      border-radius: 12px;
+      padding: 16px 18px;
+      margin-bottom: 14px;
+    }
+    .callout p { font-size: 14px; margin: 0; }
+    .callout strong { color: var(--teal); }
+
+    /* Contact */
+    .contact-block {
+      background: var(--glass);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-top: 8px;
+    }
+    .contact-block p { margin-bottom: 8px; }
+    .contact-block a { color: var(--accent); font-weight: 700; text-decoration: none; }
+    .contact-block a:hover { text-decoration: underline; }
+
+    /* Footer */
+    .doc-footer {
+      max-width: 760px;
+      margin: 56px auto 0;
+      padding: 24px 24px 0;
+      border-top: 1px solid rgba(255,255,255,0.07);
+      font-size: 12px;
+      color: rgba(170,177,173,0.4);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .doc-footer a { color: rgba(255,135,104,0.5); text-decoration: none; }
+    .doc-footer a:hover { color: var(--accent); }
+  </style>
+</head>
+<body>
+
+  <div class="doc-header">
+    <a href="/privacy/" class="back-link">← All Privacy Policies</a>
+    <div class="app-badge">
+      <span class="badge-dot"></span>
+      CueVue
+    </div>
+    <h1>Privacy Policy</h1>
+    <p class="effective">Effective Date: <strong>June 10, 2026</strong></p>
+  </div>
+
+  <div class="doc-body">
+
+    <!-- 1. Overview -->
+    <div class="section">
+      <h2>1 — Overview</h2>
+      <h3>About CueVue</h3>
+      <p>
+        CueVue is a macOS desktop application developed by Smokey River Studio. It helps presenters,
+        educators, and product teams manage live demonstrations, cue their content, and run
+        polished on-screen experiences.
+      </p>
+      <div class="callout">
+        <p><strong>Minimal data collection:</strong> CueVue is a local-first application.
+        Your presentations, scripts, and cue data are stored on your own device.
+        We do not upload your content to our servers.</p>
+      </div>
+      <p>
+        This policy describes the limited system permissions CueVue requires and the minimal
+        information that may be transmitted during use.
+      </p>
+    </div>
+
+    <!-- 2. Information We Collect -->
+    <div class="section">
+      <h2>2 — Information We Collect</h2>
+      <p>In its current version, CueVue collects:</p>
+      <ul>
+        <li>Crash reports and error logs (if you opt in to diagnostics)</li>
+        <li>App version, macOS version, and hardware architecture (for crash diagnosis)</li>
+        <li>Anonymous feature usage events (e.g., "cue triggered") — no content is included</li>
+      </ul>
+      <p>
+        Crash reports do not include the content of your presentations, recordings, or personal files.
+      </p>
+    </div>
+
+    <!-- 3. Information We Do Not Collect -->
+    <div class="section">
+      <h2>3 — Information We Do Not Collect</h2>
+      <p>CueVue does not collect, transmit, or store:</p>
+      <ul>
+        <li>Your name, email address, or account credentials (no account required)</li>
+        <li>The content of your screen recordings, presentations, or scripts</li>
+        <li>Camera video or microphone audio streams</li>
+        <li>Your location or IP address beyond standard server log metadata</li>
+        <li>Any personally identifiable information linked to usage behaviour</li>
+      </ul>
+    </div>
+
+    <!-- 4. Screen Recording -->
+    <div class="section">
+      <h2>4 — System Permissions</h2>
+
+      <div class="perm-block">
+        <h3><span class="perm-icon">🖥</span> Screen Recording</h3>
+        <p>
+          CueVue requires macOS Screen Recording permission to capture and manage
+          on-screen content for cued presentations and demonstrations.
+        </p>
+        <p>
+          <strong style="color:#f7f2e8">What this permission does:</strong>
+          Allows CueVue to read screen pixel data to power its cue detection and
+          presentation management features.
+        </p>
+        <p>
+          <strong style="color:#f7f2e8">What we do not do:</strong>
+          Screen capture data is processed locally on your Mac. No screen content
+          is transmitted to our servers or any third party.
+        </p>
+        <p>
+          You can revoke this permission at any time in <em>System Settings → Privacy &amp; Security
+          → Screen Recording</em>. Revoking will disable CueVue's core functionality.
+        </p>
+      </div>
+
+      <div class="perm-block">
+        <h3><span class="perm-icon">📷</span> Camera</h3>
+        <p>
+          CueVue may request camera access for features that include webcam preview
+          or presenter-mode overlays.
+        </p>
+        <p>
+          <strong style="color:#f7f2e8">What this permission does:</strong>
+          Provides a live camera feed within the CueVue interface for use during
+          presentations.
+        </p>
+        <p>
+          <strong style="color:#f7f2e8">What we do not do:</strong>
+          Camera footage is not recorded, stored, or transmitted. The feed is rendered
+          locally for the duration of your session only.
+        </p>
+        <p>
+          You can revoke this permission at any time in <em>System Settings → Privacy &amp; Security
+          → Camera</em>.
+        </p>
+      </div>
+
+      <div class="perm-block">
+        <h3><span class="perm-icon">🎙</span> Microphone</h3>
+        <p>
+          CueVue may request microphone access for features such as voice-triggered cues
+          or audio monitoring during live presentations.
+        </p>
+        <p>
+          <strong style="color:#f7f2e8">What this permission does:</strong>
+          Provides access to the microphone input stream for real-time use within
+          CueVue's cue engine.
+        </p>
+        <p>
+          <strong style="color:#f7f2e8">What we do not do:</strong>
+          Audio is processed locally and is not recorded, stored, or transmitted
+          to any external server.
+        </p>
+        <p>
+          You can revoke this permission at any time in <em>System Settings → Privacy &amp; Security
+          → Microphone</em>.
+        </p>
+      </div>
+    </div>
+
+    <!-- 5. Local Storage -->
+    <div class="section">
+      <h2>5 — Local Storage</h2>
+      <p>
+        CueVue stores the following data on your local device:
+      </p>
+      <ul>
+        <li>Application preferences and settings</li>
+        <li>Saved cue configurations and presentation projects</li>
+        <li>Recent file history</li>
+        <li>Window layout and UI state</li>
+      </ul>
+      <p>
+        All locally stored data remains on your Mac and is subject to your device's
+        own security and backup settings. CueVue does not sync this data to any cloud service.
+      </p>
+      <p>
+        You can clear CueVue's local data by uninstalling the application and removing its
+        associated Application Support folder.
+      </p>
+    </div>
+
+    <!-- 6. Analytics -->
+    <div class="section">
+      <h2>6 — Analytics &amp; Diagnostics</h2>
+      <p>
+        CueVue may transmit anonymized diagnostic information if you opt in. This includes:
+      </p>
+      <ul>
+        <li>App version and macOS version</li>
+        <li>Crash stack traces (no personal data or file content)</li>
+        <li>Anonymous feature usage counts (no content, no identity)</li>
+      </ul>
+      <p>
+        Diagnostic reporting is opt-in and can be disabled in CueVue's Preferences.
+        If disabled, no data is transmitted to our servers.
+      </p>
+    </div>
+
+    <!-- 7. Third-Party Services -->
+    <div class="section">
+      <h2>7 — Third-Party Services</h2>
+      <p>
+        CueVue may use the following third-party services:
+      </p>
+      <ul>
+        <li><strong>Paddle or Apple Mac App Store</strong> — payment processing for licence purchases (if applicable)</li>
+        <li><strong>Sentry or similar</strong> — opt-in crash reporting (no personal data included)</li>
+      </ul>
+      <p>
+        CueVue does not integrate advertising SDKs, social media SDKs, or user tracking
+        frameworks of any kind.
+      </p>
+    </div>
+
+    <!-- 8. Data Retention -->
+    <div class="section">
+      <h2>8 — Data Retention</h2>
+      <p>
+        Because CueVue is a local-first application, most data never leaves your device.
+        For the limited diagnostic data we receive:
+      </p>
+      <ul>
+        <li><strong>Crash reports:</strong> Retained for 90 days, then automatically deleted</li>
+        <li><strong>Anonymous usage events:</strong> Aggregated and retained for up to 12 months</li>
+        <li><strong>Purchase records:</strong> Retained as required for tax and accounting obligations (7 years, Canadian law)</li>
+      </ul>
+    </div>
+
+    <!-- 9. Children -->
+    <div class="section">
+      <h2>9 — Children's Privacy</h2>
+      <p>
+        CueVue is not directed at children under the age of 13. We do not knowingly collect
+        personal information from children. If you believe we have inadvertently collected
+        information from a child, contact us and we will delete it promptly.
+      </p>
+    </div>
+
+    <!-- 10. Changes -->
+    <div class="section">
+      <h2>10 — Changes to This Policy</h2>
+      <p>
+        We may update this Privacy Policy as CueVue adds new features. Material changes will
+        be communicated through an in-app notice or update release notes. The updated policy
+        will be posted at this URL with a revised effective date.
+      </p>
+    </div>
+
+    <!-- 11. Contact -->
+    <div class="section">
+      <h2>11 — Contact Us</h2>
+      <p>Questions, concerns, or requests about this policy:</p>
+      <div class="contact-block">
+        <p><strong style="color:#f7f2e8">Smokey River Studio</strong></p>
+        <p>Privacy Officer · CueVue</p>
+        <p>📧 <a href="mailto:privacy@smokeyriverstudio.ca">privacy@smokeyriverstudio.ca</a></p>
+        <p style="margin-top:12px;font-size:13px;color:rgba(170,177,173,0.45)">
+          We respond to privacy requests within 30 days.
+        </p>
+      </div>
+    </div>
+
+  </div><!-- /doc-body -->
+
+  <div class="doc-footer">
+    <span>© 2026 Smokey River Studio · CueVue Privacy Policy · Effective June 10, 2026</span>
+    <a href="/privacy/">← All Policies</a>
+  </div>
+
+</body>
+</html>
