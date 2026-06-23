@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Privacy Policy | MapleSAP</title>
+  <link rel="stylesheet" href="/assets/maplesap-ia.css">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -162,9 +163,47 @@
     }
     .doc-footer a { color: rgba(244,184,111,0.45); text-decoration: none; }
     .doc-footer a:hover { color: var(--amber-lt); }
+    .nav-bar ul,
+    .footer-links {
+      margin: 0;
+      list-style: none;
+    }
+    .nav-bar li,
+    .footer-links a {
+      padding: 0;
+      font-size: inherit;
+      line-height: inherit;
+    }
+    .nav-bar li::before {
+      content: none;
+    }
+    .nav-bar a,
+    .footer-links a {
+      text-decoration: none;
+    }
   </style>
 </head>
 <body>
+  <header class="site-header">
+    <div class="top-bar">
+      <a class="brand" href="/">
+        <img src="/wp-content/uploads/2024/11/Square-LOGO-100x100.webp" alt="MapleSAP logo">
+        <span class="brand-text">MapleSAP<span>Research Software</span><span>Field Notebook</span></span>
+      </a>
+      <div class="top-meta">Maple Intelligence Platform</div>
+    </div>
+    <nav class="nav-bar" aria-label="Primary navigation">
+      <span class="nav-label">Launch Preview</span>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/forecast-center/">Forecast Center</a></li>
+        <li><a href="/research/">Research</a></li>
+        <li><a href="/app/">App</a></li>
+        <li><a href="/about/">About</a></li>
+      </ul>
+    </nav>
+  </header>
+  <div class="review-banner">MapleSAP Launch Preview — Staging Only</div>
 
   <div class="doc-header">
     <a href="https://maplesap.app/" class="home-link">← MapleSAP</a>
@@ -174,6 +213,19 @@
   </div>
 
   <div class="doc-body">
+
+    <div class="section" style="background:rgba(61,155,90,0.08);border:1px solid rgba(110,201,138,0.25);border-radius:10px;padding:16px 20px;margin-bottom:8px">
+      <h2 style="color:var(--green-lt);margin-bottom:8px">Current Version Notice — v1.0.1</h2>
+      <p>The current release of mapleSAP (v1.0.1) is a <strong>sample-data preview</strong>. In this version:</p>
+      <ul style="margin:8px 0 0 20px;line-height:1.9">
+        <li>No user accounts are created or authenticated.</li>
+        <li>No personal information is collected.</li>
+        <li>No location data is requested or transmitted.</li>
+        <li>All forecasts and bush data shown are illustrative sample data only.</li>
+        <li>No data of any kind is sent to Smokey River Studio servers.</li>
+      </ul>
+      <p style="margin-top:10px">The sections below describe data practices that will apply when full account, location, and forecasting features are enabled in a future release. They do not describe behaviour of the current version.</p>
+    </div>
 
     <div class="section">
       <h2>1 — Overview</h2>
@@ -368,10 +420,14 @@
 
   </div>
 
-  <div class="doc-footer">
-    <span>© 2026 Smokey River Studio · MapleSAP Privacy Policy · Effective June 10, 2026</span>
-    <a href="https://maplesap.app/">← MapleSAP</a>
-  </div>
+  <footer class="footer">
+    <nav class="footer-links" aria-label="Footer navigation">
+      <a href="/support/">Support</a>
+      <a href="/privacy/">Privacy</a>
+      <a href="/terms/">Terms</a>
+      <a href="/archive/">Archive</a>
+    </nav>
+  </footer>
 
 </body>
 </html>
