@@ -65,7 +65,7 @@ async function handleAppRoute(request, url, env) {
   const assetUrl = new URL(request.url);
   assetUrl.hostname = 'maplesap.app';
   // All paths on app subdomain serve the SPA root (single-page app)
-  assetUrl.pathname = '/app/index.html';
+  assetUrl.pathname = '/app/';
   try {
     const res = await env.ASSETS.fetch(new Request(assetUrl.toString(), request));
     const headers = new Headers(res.headers);
@@ -79,7 +79,7 @@ async function handleAppRoute(request, url, env) {
 // /app/ path alias — rewrite to /app/index.html for local dev and preview URLs
 async function handleAppPathRoute(request, url, env) {
   const assetUrl = new URL(request.url);
-  assetUrl.pathname = '/app/index.html';
+  assetUrl.pathname = '/app/';
   try {
     const res = await env.ASSETS.fetch(new Request(assetUrl.toString(), request));
     const headers = new Headers(res.headers);
