@@ -405,7 +405,7 @@
       buildSettings = {
         ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
         CODE_SIGN_STYLE = Automatic;
-        CURRENT_PROJECT_VERSION = 200;
+        CURRENT_PROJECT_VERSION = 201;
         DEVELOPMENT_TEAM = Z3G5GYYZNL;
         GENERATE_INFOPLIST_FILE = NO;
         INFOPLIST_FILE = MapleSap/Info.plist;
@@ -426,7 +426,7 @@
       buildSettings = {
         ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
         CODE_SIGN_STYLE = Automatic;
-        CURRENT_PROJECT_VERSION = 200;
+        CURRENT_PROJECT_VERSION = 201;
         DEVELOPMENT_TEAM = Z3G5GYYZNL;
         GENERATE_INFOPLIST_FILE = NO;
         INFOPLIST_FILE = MapleSap/Info.plist;
