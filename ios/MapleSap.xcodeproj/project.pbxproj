@@ -1,0 +1,508 @@
+// !$*UTF8*$!
+{
+  archiveVersion = 1;
+  classes = {
+  };
+  objectVersion = 56;
+  objects = {
+
+/* Begin PBXBuildFile section */
+    90A000100000000000000001 /* MapleSapApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90A000010000000000000001 /* MapleSapApp.swift */; };
+    90A000110000000000000001 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90A000020000000000000001 /* ContentView.swift */; };
+    90A000120000000000000001 /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90A000030000000000000001 /* WebView.swift */; };
+    90A000130000000000000001 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 90A000040000000000000001 /* Assets.xcassets */; };
+    90A000140000000000000002 /* Bush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90A000A10000000000000002 /* Bush.swift */; };
+    90A000150000000000000002 /* ForecastDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90A000A20000000000000002 /* ForecastDay.swift */; };
+    90A000160000000000000002 /* AlertRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90A000A30000000000000002 /* AlertRecord.swift */; };
+    90A000170000000000000002 /* ForecastAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90A000A40000000000000002 /* ForecastAPIClient.swift */; };
+    90A000180000000000000002 /* ForecastCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90A000A50000000000000002 /* ForecastCache.swift */; };
+    90A000190000000000000002 /* ForecastService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90A000A60000000000000002 /* ForecastService.swift */; };
+    90A0001A0000000000000002 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90A000A70000000000000002 /* NotificationService.swift */; };
+    90A0001B0000000000000002 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90A000A80000000000000002 /* OnboardingView.swift */; };
+    90A0001C0000000000000002 /* TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90A000A90000000000000002 /* TodayView.swift */; };
+    90A0001D0000000000000002 /* MapleScoreGauge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90A000AA0000000000000002 /* MapleScoreGauge.swift */; };
+    90A0001E0000000000000002 /* RingScoreRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90A000AB0000000000000002 /* RingScoreRow.swift */; };
+    90A0001F0000000000000002 /* ConditionsPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90A000AC0000000000000002 /* ConditionsPanel.swift */; };
+    90A000200000000000000002 /* NextEventCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90A000AD0000000000000002 /* NextEventCard.swift */; };
+    90A000210000000000000002 /* WeekStripView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90A000AE0000000000000002 /* WeekStripView.swift */; };
+    90A000220000000000000002 /* ForecastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90A000AF0000000000000002 /* ForecastView.swift */; };
+    90A000230000000000000002 /* ForecastDayRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90A000B00000000000000002 /* ForecastDayRow.swift */; };
+    90A000240000000000000002 /* BushListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90A000B10000000000000002 /* BushListView.swift */; };
+    90A000250000000000000002 /* BushMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90A000B20000000000000002 /* BushMapView.swift */; };
+    90A000260000000000000002 /* AddEditBushView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90A000B30000000000000002 /* AddEditBushView.swift */; };
+    90A000270000000000000002 /* AlertsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90A000B40000000000000002 /* AlertsView.swift */; };
+    90A000280000000000000002 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90A000B50000000000000002 /* SettingsView.swift */; };
+    90A000D10000000000000003 /* ScreenshotTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90A000C10000000000000003 /* ScreenshotTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+    90A000F80000000000000003 /* PBXContainerItemProxy */ = {
+      isa = PBXContainerItemProxy;
+      containerPortal = 90A000700000000000000001 /* Project object */;
+      proxyType = 1;
+      remoteGlobalIDString = 90A000400000000000000001;
+      remoteInfo = MapleSap;
+    };
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+    90A000010000000000000001 /* MapleSapApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapleSapApp.swift; sourceTree = "<group>"; };
+    90A000020000000000000001 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+    90A000030000000000000001 /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
+    90A000040000000000000001 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+    90A000050000000000000001 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+    90A000060000000000000001 /* MapleSap.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MapleSap.app; sourceTree = BUILT_PRODUCTS_DIR; };
+    90A000A10000000000000002 /* Bush.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bush.swift; sourceTree = "<group>"; };
+    90A000A20000000000000002 /* ForecastDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastDay.swift; sourceTree = "<group>"; };
+    90A000A30000000000000002 /* AlertRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertRecord.swift; sourceTree = "<group>"; };
+    90A000A40000000000000002 /* ForecastAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastAPIClient.swift; sourceTree = "<group>"; };
+    90A000A50000000000000002 /* ForecastCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastCache.swift; sourceTree = "<group>"; };
+    90A000A60000000000000002 /* ForecastService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastService.swift; sourceTree = "<group>"; };
+    90A000A70000000000000002 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
+    90A000A80000000000000002 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+    90A000A90000000000000002 /* TodayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayView.swift; sourceTree = "<group>"; };
+    90A000AA0000000000000002 /* MapleScoreGauge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapleScoreGauge.swift; sourceTree = "<group>"; };
+    90A000AB0000000000000002 /* RingScoreRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RingScoreRow.swift; sourceTree = "<group>"; };
+    90A000AC0000000000000002 /* ConditionsPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConditionsPanel.swift; sourceTree = "<group>"; };
+    90A000AD0000000000000002 /* NextEventCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NextEventCard.swift; sourceTree = "<group>"; };
+    90A000AE0000000000000002 /* WeekStripView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeekStripView.swift; sourceTree = "<group>"; };
+    90A000AF0000000000000002 /* ForecastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastView.swift; sourceTree = "<group>"; };
+    90A000B00000000000000002 /* ForecastDayRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForecastDayRow.swift; sourceTree = "<group>"; };
+    90A000B10000000000000002 /* BushListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BushListView.swift; sourceTree = "<group>"; };
+    90A000B20000000000000002 /* BushMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BushMapView.swift; sourceTree = "<group>"; };
+    90A000B30000000000000002 /* AddEditBushView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEditBushView.swift; sourceTree = "<group>"; };
+    90A000B40000000000000002 /* AlertsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertsView.swift; sourceTree = "<group>"; };
+    90A000B50000000000000002 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+    90A000C10000000000000003 /* ScreenshotTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotTests.swift; sourceTree = "<group>"; };
+    90A000C20000000000000003 /* MapleSapUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MapleSapUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+    90A000200000000000000001 /* Frameworks */ = {
+      isa = PBXFrameworksBuildPhase;
+      buildActionMask = 2147483647;
+      files = (
+      );
+      runOnlyForDeploymentPostprocessing = 0;
+    };
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+    90A000300000000000000001 = {
+      isa = PBXGroup;
+      children = (
+        90A000310000000000000001 /* MapleSap */,
+        90A000F60000000000000003 /* MapleSapUITests */,
+        90A000320000000000000001 /* Products */,
+      );
+      sourceTree = "<group>";
+    };
+    90A000310000000000000001 /* MapleSap */ = {
+      isa = PBXGroup;
+      children = (
+        90A000010000000000000001 /* MapleSapApp.swift */,
+        90A000020000000000000001 /* ContentView.swift */,
+        90A000030000000000000001 /* WebView.swift */,
+        90A000A10000000000000002 /* Bush.swift */,
+        90A000A20000000000000002 /* ForecastDay.swift */,
+        90A000A30000000000000002 /* AlertRecord.swift */,
+        90A000A40000000000000002 /* ForecastAPIClient.swift */,
+        90A000A50000000000000002 /* ForecastCache.swift */,
+        90A000A60000000000000002 /* ForecastService.swift */,
+        90A000A70000000000000002 /* NotificationService.swift */,
+        90A000A80000000000000002 /* OnboardingView.swift */,
+        90A000A90000000000000002 /* TodayView.swift */,
+        90A000AA0000000000000002 /* MapleScoreGauge.swift */,
+        90A000AB0000000000000002 /* RingScoreRow.swift */,
+        90A000AC0000000000000002 /* ConditionsPanel.swift */,
+        90A000AD0000000000000002 /* NextEventCard.swift */,
+        90A000AE0000000000000002 /* WeekStripView.swift */,
+        90A000AF0000000000000002 /* ForecastView.swift */,
+        90A000B00000000000000002 /* ForecastDayRow.swift */,
+        90A000B10000000000000002 /* BushListView.swift */,
+        90A000B20000000000000002 /* BushMapView.swift */,
+        90A000B30000000000000002 /* AddEditBushView.swift */,
+        90A000B40000000000000002 /* AlertsView.swift */,
+        90A000B50000000000000002 /* SettingsView.swift */,
+        90A000040000000000000001 /* Assets.xcassets */,
+        90A000050000000000000001 /* Info.plist */,
+      );
+      path = MapleSap;
+      sourceTree = "<group>";
+    };
+    90A000F60000000000000003 /* MapleSapUITests */ = {
+      isa = PBXGroup;
+      children = (
+        90A000C10000000000000003 /* ScreenshotTests.swift */,
+      );
+      path = MapleSapUITests;
+      sourceTree = "<group>";
+    };
+    90A000320000000000000001 /* Products */ = {
+      isa = PBXGroup;
+      children = (
+        90A000060000000000000001 /* MapleSap.app */,
+        90A000C20000000000000003 /* MapleSapUITests.xctest */,
+      );
+      name = Products;
+      sourceTree = "<group>";
+    };
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+    90A000400000000000000001 /* MapleSap */ = {
+      isa = PBXNativeTarget;
+      buildConfigurationList = 90A000800000000000000001 /* Build configuration list for PBXNativeTarget "MapleSap" */;
+      buildPhases = (
+        90A000500000000000000001 /* Sources */,
+        90A000200000000000000001 /* Frameworks */,
+        90A000600000000000000001 /* Resources */,
+      );
+      buildRules = (
+      );
+      dependencies = (
+      );
+      name = MapleSap;
+      productName = MapleSap;
+      productReference = 90A000060000000000000001 /* MapleSap.app */;
+      productType = "com.apple.product-type.application";
+    };
+    90A000F10000000000000003 /* MapleSapUITests */ = {
+      isa = PBXNativeTarget;
+      buildConfigurationList = 90A000F50000000000000003 /* Build configuration list for PBXNativeTarget "MapleSapUITests" */;
+      buildPhases = (
+        90A000E10000000000000003 /* Sources */,
+      );
+      buildRules = (
+      );
+      dependencies = (
+        90A000F70000000000000003 /* PBXTargetDependency */,
+      );
+      name = MapleSapUITests;
+      productName = MapleSapUITests;
+      productReference = 90A000C20000000000000003 /* MapleSapUITests.xctest */;
+      productType = "com.apple.product-type.bundle.ui-testing";
+    };
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+    90A000700000000000000001 /* Project object */ = {
+      isa = PBXProject;
+      attributes = {
+        BuildIndependentTargetsInParallel = 1;
+        LastSwiftUpdateCheck = 2650;
+        LastUpgradeCheck = 2650;
+        TargetAttributes = {
+          90A000400000000000000001 = {
+            CreatedOnToolsVersion = 16.4;
+          };
+          90A000F10000000000000003 = {
+            CreatedOnToolsVersion = 16.4;
+            TestTargetID = 90A000400000000000000001;
+          };
+        };
+      };
+      buildConfigurationList = 90A000710000000000000001 /* Build configuration list for PBXProject "MapleSap" */;
+      compatibilityVersion = "Xcode 26.0";
+      developmentRegion = en;
+      hasScannedForEncodings = 0;
+      knownRegions = (
+        en,
+        Base,
+      );
+      mainGroup = 90A000300000000000000001;
+      productRefGroup = 90A000320000000000000001 /* Products */;
+      projectDirPath = "";
+      projectRoot = "";
+      targets = (
+        90A000400000000000000001 /* MapleSap */,
+        90A000F10000000000000003 /* MapleSapUITests */,
+      );
+    };
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+    90A000600000000000000001 /* Resources */ = {
+      isa = PBXResourcesBuildPhase;
+      buildActionMask = 2147483647;
+      files = (
+        90A000130000000000000001 /* Assets.xcassets in Resources */,
+      );
+      runOnlyForDeploymentPostprocessing = 0;
+    };
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+    90A000500000000000000001 /* Sources */ = {
+      isa = PBXSourcesBuildPhase;
+      buildActionMask = 2147483647;
+      files = (
+        90A000100000000000000001 /* MapleSapApp.swift in Sources */,
+        90A000110000000000000001 /* ContentView.swift in Sources */,
+        90A000120000000000000001 /* WebView.swift in Sources */,
+        90A000140000000000000002 /* Bush.swift in Sources */,
+        90A000150000000000000002 /* ForecastDay.swift in Sources */,
+        90A000160000000000000002 /* AlertRecord.swift in Sources */,
+        90A000170000000000000002 /* ForecastAPIClient.swift in Sources */,
+        90A000180000000000000002 /* ForecastCache.swift in Sources */,
+        90A000190000000000000002 /* ForecastService.swift in Sources */,
+        90A0001A0000000000000002 /* NotificationService.swift in Sources */,
+        90A0001B0000000000000002 /* OnboardingView.swift in Sources */,
+        90A0001C0000000000000002 /* TodayView.swift in Sources */,
+        90A0001D0000000000000002 /* MapleScoreGauge.swift in Sources */,
+        90A0001E0000000000000002 /* RingScoreRow.swift in Sources */,
+        90A0001F0000000000000002 /* ConditionsPanel.swift in Sources */,
+        90A000200000000000000002 /* NextEventCard.swift in Sources */,
+        90A000210000000000000002 /* WeekStripView.swift in Sources */,
+        90A000220000000000000002 /* ForecastView.swift in Sources */,
+        90A000230000000000000002 /* ForecastDayRow.swift in Sources */,
+        90A000240000000000000002 /* BushListView.swift in Sources */,
+        90A000250000000000000002 /* BushMapView.swift in Sources */,
+        90A000260000000000000002 /* AddEditBushView.swift in Sources */,
+        90A000270000000000000002 /* AlertsView.swift in Sources */,
+        90A000280000000000000002 /* SettingsView.swift in Sources */,
+      );
+      runOnlyForDeploymentPostprocessing = 0;
+    };
+    90A000E10000000000000003 /* Sources */ = {
+      isa = PBXSourcesBuildPhase;
+      buildActionMask = 2147483647;
+      files = (
+        90A000D10000000000000003 /* ScreenshotTests.swift in Sources */,
+      );
+      runOnlyForDeploymentPostprocessing = 0;
+    };
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+    90A000F70000000000000003 /* PBXTargetDependency */ = {
+      isa = PBXTargetDependency;
+      target = 90A000400000000000000001 /* MapleSap */;
+      targetProxy = 90A000F80000000000000003 /* PBXContainerItemProxy */;
+    };
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+    90A000900000000000000001 /* Debug */ = {
+      isa = XCBuildConfiguration;
+      buildSettings = {
+        ALWAYS_SEARCH_USER_PATHS = NO;
+        CLANG_ANALYZER_NONNULL = YES;
+        CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+        CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+        CLANG_ENABLE_MODULES = YES;
+        CLANG_ENABLE_OBJC_ARC = YES;
+        CLANG_ENABLE_OBJC_WEAK = YES;
+        CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+        CLANG_WARN_BOOL_CONVERSION = YES;
+        CLANG_WARN_COMMA = YES;
+        CLANG_WARN_CONSTANT_CONVERSION = YES;
+        CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+        CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+        CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+        CLANG_WARN_EMPTY_BODY = YES;
+        CLANG_WARN_ENUM_CONVERSION = YES;
+        CLANG_WARN_INFINITE_RECURSION = YES;
+        CLANG_WARN_INT_CONVERSION = YES;
+        CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+        CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+        CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+        CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+        CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+        CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+        CLANG_WARN_STRICT_PROTOTYPES = YES;
+        CLANG_WARN_SUSPICIOUS_MOVE = YES;
+        CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+        CLANG_WARN_UNREACHABLE_CODE = YES;
+        CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+        COPY_PHASE_STRIP = NO;
+        DEBUG_INFORMATION_FORMAT = dwarf;
+        ENABLE_STRICT_OBJC_MSGSEND = YES;
+        ENABLE_TESTABILITY = YES;
+        ENABLE_USER_SCRIPT_SANDBOXING = YES;
+        GCC_C_LANGUAGE_STANDARD = gnu17;
+        GCC_DYNAMIC_NO_PIC = NO;
+        GCC_NO_COMMON_BLOCKS = YES;
+        GCC_OPTIMIZATION_LEVEL = 0;
+        GCC_PREPROCESSOR_DEFINITIONS = (
+          "DEBUG=1",
+          "$(inherited)",
+        );
+        GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+        GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+        GCC_WARN_UNDECLARED_SELECTOR = YES;
+        GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+        GCC_WARN_UNUSED_FUNCTION = YES;
+        GCC_WARN_UNUSED_VARIABLE = YES;
+        IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+        LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+        MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+        MTL_FAST_MATH = YES;
+        ONLY_ACTIVE_ARCH = YES;
+        SDKROOT = iphoneos;
+        SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+        SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+      };
+      name = Debug;
+    };
+    90A000910000000000000001 /* Release */ = {
+      isa = XCBuildConfiguration;
+      buildSettings = {
+        ALWAYS_SEARCH_USER_PATHS = NO;
+        CLANG_ANALYZER_NONNULL = YES;
+        CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+        CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+        CLANG_ENABLE_MODULES = YES;
+        CLANG_ENABLE_OBJC_ARC = YES;
+        CLANG_ENABLE_OBJC_WEAK = YES;
+        CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+        CLANG_WARN_BOOL_CONVERSION = YES;
+        CLANG_WARN_COMMA = YES;
+        CLANG_WARN_CONSTANT_CONVERSION = YES;
+        CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+        CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+        CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+        CLANG_WARN_EMPTY_BODY = YES;
+        CLANG_WARN_ENUM_CONVERSION = YES;
+        CLANG_WARN_INFINITE_RECURSION = YES;
+        CLANG_WARN_INT_CONVERSION = YES;
+        CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+        CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+        CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+        CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+        CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+        CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+        CLANG_WARN_STRICT_PROTOTYPES = YES;
+        CLANG_WARN_SUSPICIOUS_MOVE = YES;
+        CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+        CLANG_WARN_UNREACHABLE_CODE = YES;
+        CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+        COPY_PHASE_STRIP = NO;
+        DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+        ENABLE_NS_ASSERTIONS = NO;
+        ENABLE_STRICT_OBJC_MSGSEND = YES;
+        ENABLE_USER_SCRIPT_SANDBOXING = YES;
+        GCC_C_LANGUAGE_STANDARD = gnu17;
+        GCC_NO_COMMON_BLOCKS = YES;
+        GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+        GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+        GCC_WARN_UNDECLARED_SELECTOR = YES;
+        GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+        GCC_WARN_UNUSED_FUNCTION = YES;
+        GCC_WARN_UNUSED_VARIABLE = YES;
+        IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+        LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+        MTL_ENABLE_DEBUG_INFO = NO;
+        MTL_FAST_MATH = YES;
+        SDKROOT = iphoneos;
+        SWIFT_COMPILATION_MODE = wholemodule;
+        VALIDATE_PRODUCT = YES;
+      };
+      name = Release;
+    };
+    90A000920000000000000001 /* Debug */ = {
+      isa = XCBuildConfiguration;
+      buildSettings = {
+        ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+        CODE_SIGN_STYLE = Automatic;
+        CURRENT_PROJECT_VERSION = 200;
+        DEVELOPMENT_TEAM = Z3G5GYYZNL;
+        GENERATE_INFOPLIST_FILE = NO;
+        INFOPLIST_FILE = MapleSap/Info.plist;
+        MARKETING_VERSION = 2.0.0;
+        PRODUCT_BUNDLE_IDENTIFIER = com.smokeyriverstudio.maplesap;
+        PRODUCT_NAME = MapleSap;
+        SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+        SUPPORTS_MACCATALYST = NO;
+        SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+        SWIFT_EMIT_LOC_STRINGS = YES;
+        SWIFT_VERSION = 5.0;
+        TARGETED_DEVICE_FAMILY = "1,2";
+      };
+      name = Debug;
+    };
+    90A000930000000000000001 /* Release */ = {
+      isa = XCBuildConfiguration;
+      buildSettings = {
+        ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+        CODE_SIGN_STYLE = Automatic;
+        CURRENT_PROJECT_VERSION = 200;
+        DEVELOPMENT_TEAM = Z3G5GYYZNL;
+        GENERATE_INFOPLIST_FILE = NO;
+        INFOPLIST_FILE = MapleSap/Info.plist;
+        MARKETING_VERSION = 2.0.0;
+        PRODUCT_BUNDLE_IDENTIFIER = com.smokeyriverstudio.maplesap;
+        PRODUCT_NAME = MapleSap;
+        SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+        SUPPORTS_MACCATALYST = NO;
+        SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+        SWIFT_EMIT_LOC_STRINGS = YES;
+        SWIFT_VERSION = 5.0;
+        TARGETED_DEVICE_FAMILY = "1,2";
+      };
+      name = Release;
+    };
+    90A000F30000000000000003 /* Debug */ = {
+      isa = XCBuildConfiguration;
+      buildSettings = {
+        CODE_SIGN_STYLE = Automatic;
+        DEVELOPMENT_TEAM = Z3G5GYYZNL;
+        GENERATE_INFOPLIST_FILE = YES;
+        IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+        PRODUCT_BUNDLE_IDENTIFIER = com.smokeyriverstudio.maplesap.uitests;
+        PRODUCT_NAME = "$(TARGET_NAME)";
+        SWIFT_VERSION = 5.0;
+        TARGETED_DEVICE_FAMILY = "1,2";
+        TEST_TARGET_NAME = MapleSap;
+      };
+      name = Debug;
+    };
+    90A000F40000000000000003 /* Release */ = {
+      isa = XCBuildConfiguration;
+      buildSettings = {
+        CODE_SIGN_STYLE = Automatic;
+        DEVELOPMENT_TEAM = Z3G5GYYZNL;
+        GENERATE_INFOPLIST_FILE = YES;
+        IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+        PRODUCT_BUNDLE_IDENTIFIER = com.smokeyriverstudio.maplesap.uitests;
+        PRODUCT_NAME = "$(TARGET_NAME)";
+        SWIFT_VERSION = 5.0;
+        TARGETED_DEVICE_FAMILY = "1,2";
+        TEST_TARGET_NAME = MapleSap;
+      };
+      name = Release;
+    };
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+    90A000710000000000000001 /* Build configuration list for PBXProject "MapleSap" */ = {
+      isa = XCConfigurationList;
+      buildConfigurations = (
+        90A000900000000000000001 /* Debug */,
+        90A000910000000000000001 /* Release */,
+      );
+      defaultConfigurationIsVisible = 0;
+      defaultConfigurationName = Release;
+    };
+    90A000800000000000000001 /* Build configuration list for PBXNativeTarget "MapleSap" */ = {
+      isa = XCConfigurationList;
+      buildConfigurations = (
+        90A000920000000000000001 /* Debug */,
+        90A000930000000000000001 /* Release */,
+      );
+      defaultConfigurationIsVisible = 0;
+      defaultConfigurationName = Release;
+    };
+    90A000F50000000000000003 /* Build configuration list for PBXNativeTarget "MapleSapUITests" */ = {
+      isa = XCConfigurationList;
+      buildConfigurations = (
+        90A000F30000000000000003 /* Debug */,
+        90A000F40000000000000003 /* Release */,
+      );
+      defaultConfigurationIsVisible = 0;
+      defaultConfigurationName = Release;
+    };
+/* End XCConfigurationList section */
+  };
+  rootObject = 90A000700000000000000001 /* Project object */;
+}

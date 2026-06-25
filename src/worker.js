@@ -2,6 +2,7 @@ import { chartDataForWeather } from './charts.js';
 import { predictionForWeather } from './prediction.js';
 import { supabaseConfig, supabaseRest, weatherDaysQuery } from './supabase.js';
 import { fetchForecastWeather, fetchHistoricalWeather, parseCoordinate, seasonalWindow } from './weather.js';
+import { runForecastEngine } from './forecast-engine-v1/index.js';
 
 const jsonHeaders = {
   'Content-Type': 'application/json',
@@ -23,7 +24,8 @@ export default {
     }
 
     // ── app.maplesap.app — production application (open, indexed)
-    if (host === 'app.maplesap.app') {
+    // API calls on the app subdomain fall through to the shared API handlers below.
+    if (host === 'app.maplesap.app' && !url.pathname.startsWith('/api/')) {
       return handleAppRoute(request, url, env);
     }
 
@@ -44,6 +46,7 @@ export default {
 
     try {
       if (url.pathname === '/api/health') return json({ ok: true, supabase: supabaseConfig(env) });
+      if (url.pathname === '/api/forecast/v1') return json(await forecastV1(url));
       if (url.pathname === '/api/feedback' && request.method === 'POST') return json(await createFeedback(request, env), 201);
       if (url.pathname === '/api/weather/historical') return json(await historicalWeather(url));
       if (url.pathname === '/api/weather/forecast') return json(await forecastWeather(url));
@@ -195,6 +198,17 @@ button[type=submit]{display:block;width:100%;height:52px;background:#c8731a;bord
 </div>
 </body>
 </html>`;
+}
+
+// ─── Forecast Engine V1 ───────────────────────────────────────────────────────
+
+async function forecastV1(url) {
+  const latitude = parseCoordinate(url.searchParams.get('latitude'), 46.57);
+  const longitude = parseCoordinate(url.searchParams.get('longitude'), -81.32);
+  const rawDays = parseInt(url.searchParams.get('days') || '14', 10);
+  const days = Number.isFinite(rawDays) ? Math.min(16, Math.max(1, rawDays)) : 14;
+  const forecast = await runForecastEngine({ latitude, longitude, forecastDays: days });
+  return { ok: true, latitude, longitude, days, forecast };
 }
 
 // ─── Shared Helpers ───────────────────────────────────────────────────────────

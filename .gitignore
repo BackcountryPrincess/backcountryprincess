@@ -4,3 +4,19 @@ public/env.js
 public/vendor/supabase.js
 *.log
 .DS_Store
+
+# Build artifacts
+/build/
+/dist/
+/releases/
+/screenshots/
+
+# Electron (not used in iOS release)
+electron/
+
+# Xcode DerivedData and user state
+ios/MapleSap.xcodeproj/project.xcworkspace/xcuserdata/
+ios/MapleSap.xcodeproj/xcuserdata/
+
+# Session audit documents
+.claude/
