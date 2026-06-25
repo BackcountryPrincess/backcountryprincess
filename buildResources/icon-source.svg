@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024">
+  <rect width="1024" height="1024" rx="224" fill="#f4ead8"/>
+  <circle cx="512" cy="512" r="366" fill="#fff8ed"/>
+  <path fill="#9d2f1f" d="M515 152 572 327 746 258 650 421 828 472 648 533 743 702 569 626 515 872 461 626 287 702 382 533 202 472 380 421 284 258 458 327Z"/>
+  <path fill="#d89032" d="M512 281 545 382 646 342 590 436 694 465 589 501 644 600 543 556 512 699 481 556 380 600 435 501 330 465 434 436 378 342 479 382Z"/>
+  <text x="512" y="840" text-anchor="middle" fill="#3a2a19" font-family="Avenir Next, Arial, sans-serif" font-size="118" font-weight="800">MS</text>
+</svg>
