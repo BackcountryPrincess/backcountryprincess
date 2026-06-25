@@ -1,14 +1,75 @@
 {
   "name": "maplesap",
-  "version": "1.0.0",
+  "version": "1.0.4",
+  "buildVersion": "104",
+  "productName": "MapleSAP",
+  "author": "Smokey River Studio",
+  "description": "MapleSap - Northern sugarbush forecasting for better sap runs.",
   "private": true,
   "type": "module",
+  "main": "electron/main.cjs",
   "scripts": {
     "build": "node scripts/build-env.mjs && wrangler deploy --dry-run",
     "dev": "node scripts/build-env.mjs && wrangler dev --local --port 8787",
-    "deploy": "node scripts/build-env.mjs && wrangler deploy"
+    "deploy": "node scripts/build-env.mjs && wrangler deploy",
+    "app:start": "electron .",
+    "app:icon": "node scripts/generate-macos-icon.mjs",
+    "build:mac-dir": "npm run app:icon && electron-builder --mac dir --publish never",
+    "build:mas": "npm run app:icon && electron-builder --mac mas --publish never",
+    "build:appstore": "npm run build:mas",
+    "upload:appstore": "node scripts/upload-appstore.mjs"
+  },
+  "build": {
+    "appId": "com.smokeyriverstudio.maplesap",
+    "productName": "MapleSAP",
+    "buildVersion": "104",
+    "artifactName": "MapleSap-${version}-${arch}.${ext}",
+    "directories": {
+      "output": "dist",
+      "buildResources": "buildResources"
+    },
+    "files": [
+      "electron/**/*",
+      "package.json"
+    ],
+    "mac": {
+      "category": "public.app-category.weather",
+      "target": [
+        "dir"
+      ],
+      "icon": "buildResources/icon.icns",
+      "gatekeeperAssess": false,
+      "hardenedRuntime": true,
+      "entitlements": "buildResources/entitlements.mac.plist",
+      "entitlementsInherit": "buildResources/entitlements.mac.inherit.plist",
+      "extendInfo": {
+        "NSAppTransportSecurity": {
+          "NSAllowsArbitraryLoads": false
+        }
+      }
+    },
+    "mas": {
+      "category": "public.app-category.weather",
+      "target": [
+        "mas"
+      ],
+      "icon": "buildResources/icon.icns",
+      "identity": "Jennifer Brkljacich (Z3G5GYYZNL)",
+      "provisioningProfile": "buildResources/MapleSap_AppStore.provisionprofile",
+      "hardenedRuntime": false,
+      "entitlements": "buildResources/entitlements.mas.plist",
+      "entitlementsInherit": "buildResources/entitlements.mas.inherit.plist",
+      "extendInfo": {
+        "NSAppTransportSecurity": {
+          "NSAllowsArbitraryLoads": false
+        }
+      }
+    },
+    "publish": null
   },
   "devDependencies": {
+    "electron": "^41.5.0",
+    "electron-builder": "^26.8.1",
     "wrangler": "^4.90.0"
   },
   "dependencies": {

@@ -20,3 +20,13 @@ ios/MapleSap.xcodeproj/xcuserdata/
 
 # Session audit documents
 .claude/
+
+# Session audit documents
+MAPLESAP_*.md
+AUDIT_REPORT.md
+app-store-assets.md
+app-store-submission-checklist.md
+build-104-*.md
+final-archive-readiness.md
+icon-validation.md
+release-candidate.md

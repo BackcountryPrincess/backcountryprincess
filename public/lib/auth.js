@@ -192,11 +192,11 @@ export async function renderDashboard() {
         </section>
         <section class="maplesap-dashboard-card">
           <h2>Premium status</h2>
-          <p class="maplesap-muted">Subscription status placeholder. Stripe is not connected yet.</p>
+          <p class="maplesap-muted">Premium features are coming soon. You'll be notified when subscriptions are available.</p>
         </section>
         <section class="maplesap-dashboard-card">
           <h2>Forecast workspace</h2>
-          <p class="maplesap-muted">Forecast dashboard placeholder. Existing public predictor logic remains unchanged.</p>
+          <p class="maplesap-muted">Your personalized forecast workspace is coming in a future update. Use the <a href="/">home page</a> to access the maple sap predictor now.</p>
         </section>
       </div>
     </div>
