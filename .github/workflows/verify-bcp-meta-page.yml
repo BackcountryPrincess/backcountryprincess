@@ -1,0 +1,26 @@
+name: Verify Backcountry Princess Meta Page
+on:
+  push:
+    branches: [main]
+    paths: [".github/workflows/verify-bcp-meta-page.yml"]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    env:
+      META_ACCESS_TOKEN: ${{ secrets.FB_ACCESS_TOKEN }}
+    steps:
+      - name: Require exactly one Backcountry Princess Page
+        shell: python
+        run: |
+          import json,os,urllib.parse,urllib.request
+          token=os.environ["META_ACCESS_TOKEN"]
+          url="https://graph.facebook.com/v21.0/me/accounts?"+urllib.parse.urlencode({
+            "fields":"id,name","limit":"100","access_token":token})
+          with urllib.request.urlopen(url,timeout=90) as r:
+            pages=json.loads(r.read().decode()).get("data",[])
+          matches=[p for p in pages if "backcountry princess" in p.get("name","").lower()]
+          if len(matches)!=1:
+            raise SystemExit("Correct Backcountry Princess Page was not uniquely resolved")
+          print("Correct Backcountry Princess Page was uniquely resolved.")
