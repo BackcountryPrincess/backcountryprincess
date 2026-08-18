@@ -1,4 +1,5 @@
 name: Publish MapleSap Memes to Facebook
+# Push update intentionally triggers the registered workflow.
 
 on:
   workflow_dispatch:
