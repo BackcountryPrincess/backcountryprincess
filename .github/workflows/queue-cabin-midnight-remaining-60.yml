@@ -1,0 +1,104 @@
+name: Queue Cabin Midnight Remaining 60
+on:
+  push:
+    branches: [main]
+    paths: [".github/workflows/queue-cabin-midnight-remaining-60.yml"]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  queue:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      META_ACCESS_TOKEN: ${{ secrets.FB_ACCESS_TOKEN }}
+    steps:
+      - name: Reconcile uploaded media and schedule remaining 60
+        shell: python
+        run: |
+          import datetime,json,os,sys,time,urllib.error,urllib.parse,urllib.request
+          GRAPH="https://graph.facebook.com/v21.0"
+          TOKEN=os.environ["META_ACCESS_TOKEN"]
+          def req(url,data=None):
+            payload=urllib.parse.urlencode(data).encode() if data else None
+            request=urllib.request.Request(url,data=payload,method="POST" if data else "GET")
+            try:
+              with urllib.request.urlopen(request,timeout=90) as r:
+                return json.loads(r.read().decode())
+            except urllib.error.HTTPError as e:
+              raise RuntimeError(f"HTTP {e.code}: {e.read().decode(errors='replace')}")
+          def collect(url):
+            out=[]
+            while url:
+              body=req(url); out.extend(body.get("data",[])); url=body.get("paging",{}).get("next")
+            return out
+          accounts=collect(GRAPH+"/me/accounts?"+urllib.parse.urlencode({
+            "fields":"id,name,access_token","limit":"100","access_token":TOKEN}))
+          pages=[p for p in accounts if p.get("name","").strip().lower()=="cabin midnight"]
+          if len(pages)!=1:
+            raise SystemExit("Safety gate: Cabin Midnight Page was not uniquely resolved")
+          page=pages[0]; page_id=page["id"]; page_token=page["access_token"]
+          since=int(datetime.datetime(2026,8,13,tzinfo=datetime.timezone.utc).timestamp())
+          photos=collect(GRAPH+f"/{page_id}/photos?"+urllib.parse.urlencode({
+            "type":"uploaded","fields":"id,name,created_time","since":str(since),
+            "limit":"100","access_token":page_token}))
+          scheduled=collect(GRAPH+f"/{page_id}/scheduled_posts?"+urllib.parse.urlencode({
+            "fields":"id,message,scheduled_publish_time,attachments{target,subattachments}",
+            "limit":"100","access_token":page_token}))
+          def targets(attachments):
+            ids=set()
+            for a in attachments or []:
+              target=(a.get("target") or {}).get("id")
+              if target: ids.add(str(target))
+              ids.update(targets((a.get("subattachments") or {}).get("data",[])))
+            return ids
+          scheduled_photo_ids=set()
+          for post in scheduled:
+            scheduled_photo_ids.update(targets((post.get("attachments") or {}).get("data",[])))
+          photos_by_id={str(p["id"]):p for p in photos}
+          already=[p for pid,p in photos_by_id.items() if pid in scheduled_photo_ids]
+          remaining=[p for pid,p in photos_by_id.items() if pid not in scheduled_photo_ids]
+          remaining.sort(key=lambda p:p.get("created_time",""))
+          print(f"Safety reconciliation: uploaded={len(photos)} already_scheduled={len(already)} remaining={len(remaining)}",flush=True)
+          if (len(photos),len(already),len(remaining))!=(75,15,60):
+            raise SystemExit("Safety gate failed: expected exactly 75 uploaded, 15 scheduled, 60 remaining; no posts created")
+          latest=max([int(p.get("scheduled_publish_time",0)) for p in scheduled] or [int(time.time())+900])
+          tz=datetime.timezone(datetime.timedelta(hours=-4))
+          cursor=datetime.datetime.fromtimestamp(max(latest,int(time.time())+900),tz)
+          slots=[]
+          day=(cursor+datetime.timedelta(days=1)).date()
+          while len(slots)<60:
+            for hour in (12,16,20):
+              slot=datetime.datetime(day.year,day.month,day.day,hour,15,tzinfo=tz)
+              if slot.timestamp()>time.time()+600:
+                slots.append(int(slot.timestamp()))
+                if len(slots)==60: break
+            day+=datetime.timedelta(days=1)
+          endpoint=GRAPH+f"/{page_id}/feed"
+          created=[]
+          for i,(photo,when) in enumerate(zip(remaining,slots),1):
+            label=(photo.get("name") or "").strip()
+            data={
+              "message":label,
+              "attached_media":json.dumps([{"media_fbid":str(photo["id"])}]),
+              "published":"false",
+              "unpublished_content_type":"SCHEDULED",
+              "scheduled_publish_time":str(when),
+              "access_token":page_token}
+            body=None
+            for attempt in range(5):
+              try:
+                body=req(endpoint,data); break
+              except Exception as e:
+                if attempt==4: raise
+                time.sleep((attempt+1)*5)
+            post_id=body.get("id")
+            if not post_id: raise RuntimeError(f"No post id for item {i}: {body}")
+            created.append(post_id)
+            print(f"Scheduled {i:02d}/60",flush=True)
+          verify=collect(GRAPH+f"/{page_id}/scheduled_posts?"+urllib.parse.urlencode({
+            "fields":"id","limit":"100","access_token":page_token}))
+          created_set=set(created); verified=sum(1 for p in verify if str(p.get("id")) in created_set)
+          print(f"Created and returned by Facebook scheduled_posts: {verified}/60",flush=True)
+          if verified!=60:
+            raise SystemExit(f"Verification failed: {verified}/60 created posts visible")
