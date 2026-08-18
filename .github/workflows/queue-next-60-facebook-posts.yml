@@ -22,7 +22,7 @@ jobs:
       FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
       META_ACCESS_TOKEN: ${{ secrets.FB_ACCESS_TOKEN }}
       GRAPH_VERSION: v21.0
-      RESUME_INDEX: "48"
+      RESUME_INDEX: "59"
       BASE_SCHEDULE_EPOCH: "1787082657"
 
     steps:
@@ -146,7 +146,7 @@ jobs:
           for index, (filename, caption) in enumerate(queue, start=1):
               if index < resume_index:
                   continue
-              scheduled_at = start + (index - 1) * interval
+              scheduled_at = (start + (index - 1) * interval) if index < 59 else (start + 57 * interval + (index - 58) * 4 * 60 * 60)
               payload = {
                   "url": RAW_BASE + filename,
                   "caption": caption,
