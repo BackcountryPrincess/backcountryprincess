@@ -2,7 +2,7 @@ name: Queue Casual Misconduct Remaining 60
 on:
   push:
     branches: [main]
-    paths: [".github/workflows/queue-casual-misconduct-remaining-60.yml"]
+    paths: [".github/workflows/queue-cabin-midnight-remaining-60.yml"]
   workflow_dispatch:
 permissions:
   contents: read
