@@ -6,6 +6,7 @@ on:
     paths: [".github/workflows/verify-facebook-60-post-queue.yml"]
 permissions:
   contents: read
+  statuses: write
 jobs:
   verify:
     runs-on: ubuntu-latest
@@ -51,3 +52,17 @@ jobs:
               time.sleep(20)
           if count < 60:
               raise SystemExit(f"Facebook scheduled_posts verification failed: {count}/60")
+
+      - name: Record verified commit status
+        env:
+          GH_TOKEN: ${{ github.token }}
+          COMMIT_SHA: ${{ github.sha }}
+          REPOSITORY: ${{ github.repository }}
+        shell: bash
+        run: |
+          curl --fail-with-body --silent --show-error \
+            --request POST \
+            --header "Authorization: Bearer $GH_TOKEN" \
+            --header "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/$REPOSITORY/statuses/$COMMIT_SHA" \
+            --data '{"state":"success","context":"facebook-queue/verified-60","description":"Facebook returned all 60 scheduled posts"}'
