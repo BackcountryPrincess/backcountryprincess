@@ -1,0 +1,53 @@
+name: Verify Facebook 60-Post Queue
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: [".github/workflows/verify-facebook-60-post-queue.yml"]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
+      META_ACCESS_TOKEN: ${{ secrets.FB_ACCESS_TOKEN }}
+    steps:
+      - name: Require 60 dashboard-visible scheduled posts
+        shell: python
+        run: |
+          import json, os, time, urllib.parse, urllib.request
+          graph = "https://graph.facebook.com/v21.0"
+          page_id = os.environ["FB_PAGE_ID"]
+          token = os.environ["META_ACCESS_TOKEN"]
+          def get(url):
+              with urllib.request.urlopen(url, timeout=90) as r:
+                  return json.loads(r.read().decode())
+          accounts = get(graph + "/me/accounts?" + urllib.parse.urlencode({
+              "fields": "id,access_token", "limit": "100", "access_token": token
+          })).get("data", [])
+          page = next((x for x in accounts if str(x.get("id")) == str(page_id)), None)
+          if not page:
+              raise SystemExit("Configured Page is not available from the Meta token")
+          page_token = page["access_token"]
+          count = 0
+          for attempt in range(1, 31):
+              count = 0
+              url = graph + f"/{page_id}/scheduled_posts?" + urllib.parse.urlencode({
+                  "fields": "id,message", "limit": "100", "access_token": page_token
+              })
+              while url:
+                  body = get(url)
+                  count += sum(
+                      1 for post in body.get("data", [])
+                      if "maplesap.app" in (post.get("message") or "").lower()
+                  )
+                  url = body.get("paging", {}).get("next")
+              if count >= 60:
+                  print("Verified: Facebook returned all 60 scheduled MapleSap posts.")
+                  break
+              print(f"Waiting for Facebook queue: {count}/60 verified.", flush=True)
+              time.sleep(20)
+          if count < 60:
+              raise SystemExit(f"Facebook scheduled_posts verification failed: {count}/60")
