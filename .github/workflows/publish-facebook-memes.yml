@@ -99,7 +99,7 @@ jobs:
                   "url": image_url,
                   "caption": caption,
                   "published": "true",
-                  "access_token": token,
+                  "access_token": page_token,
               }).encode()
               request = urllib.request.Request(endpoint, data=payload, method="POST")
               try:
@@ -123,6 +123,6 @@ jobs:
           with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as summary:
               summary.write("## Facebook meme upload complete\n\n")
               for item in published:
-                  summary.write(f"- {item['name']}: \`{item['id']}\`\n")
+                  summary.write(f"- {item['name']}: `{item['id']}`\n")
 
           print(json.dumps(published, indent=2))
