@@ -1,8 +1,8 @@
-name: Queue Cabin Midnight Remaining 60
+name: Queue Casual Misconduct Remaining 60
 on:
   push:
     branches: [main]
-    paths: [".github/workflows/queue-cabin-midnight-remaining-60.yml"]
+    paths: [".github/workflows/queue-casual-misconduct-remaining-60.yml"]
   workflow_dispatch:
 permissions:
   contents: read
@@ -36,7 +36,7 @@ jobs:
             "fields":"id,name,access_token","limit":"100","access_token":TOKEN}))
           pages=[p for p in accounts if p.get("name","").strip().lower()=="cabin midnight"]
           if len(pages)!=1:
-            raise SystemExit("Safety gate: Cabin Midnight Page was not uniquely resolved")
+            raise SystemExit("Safety gate: Casual Misconduct Page was not uniquely resolved")
           page=pages[0]; page_id=page["id"]; page_token=page["access_token"]
           since=int(datetime.datetime(2026,8,13,tzinfo=datetime.timezone.utc).timestamp())
           photos=collect(GRAPH+f"/{page_id}/photos?"+urllib.parse.urlencode({
