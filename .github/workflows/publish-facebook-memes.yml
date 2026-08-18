@@ -44,7 +44,31 @@ jobs:
           page_id = os.environ["FB_PAGE_ID"]
           token = os.environ["META_ACCESS_TOKEN"]
           version = os.environ.get("GRAPH_VERSION", "v21.0")
-          endpoint = f"https://graph.facebook.com/{version}/{page_id}/photos"
+          graph_base = f"https://graph.facebook.com/{version}"
+
+          # The repository secret is the Meta user/system token. Resolve the
+          # Page-scoped token before publishing; never send a service-auth token.
+          accounts_url = graph_base + "/me/accounts?" + urllib.parse.urlencode({
+              "fields": "id,name,access_token",
+              "limit": "100",
+              "access_token": token,
+          })
+          try:
+              with urllib.request.urlopen(accounts_url, timeout=60) as response:
+                  accounts = json.loads(response.read().decode()).get("data", [])
+          except urllib.error.HTTPError as exc:
+              detail = exc.read().decode(errors="replace")
+              print(f"::error::Could not resolve Facebook Page token ({exc.code}): {detail}")
+              sys.exit(1)
+
+          page = next((item for item in accounts if str(item.get("id")) == str(page_id)), None)
+          if not page or not page.get("access_token"):
+              available = ", ".join(str(item.get("id")) for item in accounts) or "none"
+              print(f"::error::Meta token does not return FB_PAGE_ID {page_id}; available Page IDs: {available}")
+              sys.exit(1)
+
+          page_token = page["access_token"]
+          endpoint = f"{graph_base}/{page_id}/photos"
 
           memes = [
               (
