@@ -1,0 +1,103 @@
+name: Publish MapleSap Memes to Facebook
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/publish-facebook-memes.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: publish-maplesap-facebook-memes
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
+      META_ACCESS_TOKEN: ${{ secrets.META_ACCESS_TOKEN }}
+      GRAPH_VERSION: v21.0
+
+    steps:
+      - name: Validate Meta configuration
+        shell: bash
+        run: |
+          test -n "$FB_PAGE_ID" || { echo "::error::FB_PAGE_ID is not configured"; exit 1; }
+          test -n "$META_ACCESS_TOKEN" || { echo "::error::META_ACCESS_TOKEN is not configured"; exit 1; }
+
+      - name: Publish memes to Facebook
+        shell: python
+        run: |
+          import json
+          import os
+          import sys
+          import urllib.parse
+          import urllib.request
+          import urllib.error
+
+          page_id = os.environ["FB_PAGE_ID"]
+          token = os.environ["META_ACCESS_TOKEN"]
+          version = os.environ.get("GRAPH_VERSION", "v21.0")
+          endpoint = f"https://graph.facebook.com/{version}/{page_id}/photos"
+
+          memes = [
+              (
+                  "Forecast",
+                  "https://raw.githubusercontent.com/SmokeyRiverStudio/maplesap/maplesap-launch-prep-june2026/public/assets/maplesap-field/blackboard-forecast.png",
+                  "Maple season forecast: watch the weather, follow the freeze-thaw rhythm, and be ready when the sap starts moving. 🍁",
+              ),
+              (
+                  "Freeze",
+                  "https://raw.githubusercontent.com/SmokeyRiverStudio/maplesap/maplesap-launch-prep-june2026/public/assets/maplesap-field/blackboard-freeze.png",
+                  "Cold nights set the stage. Warm days get the sap moving. That freeze-thaw cycle is where maple season comes alive. 🍁",
+              ),
+              (
+                  "Great Season",
+                  "https://raw.githubusercontent.com/SmokeyRiverStudio/maplesap/maplesap-launch-prep-june2026/public/assets/maplesap-field/blackboard-great-season.png",
+                  "A great maple season starts with good timing, good trees, and weather worth watching. 🍁",
+              ),
+              (
+                  "Prime Window",
+                  "https://raw.githubusercontent.com/SmokeyRiverStudio/maplesap/maplesap-launch-prep-june2026/public/assets/maplesap-field/blackboard-prime-window.png",
+                  "The prime maple window can be short. MapleSap helps you see it coming. 🍁",
+              ),
+          ]
+
+          published = []
+          for name, image_url, caption in memes:
+              payload = urllib.parse.urlencode({
+                  "url": image_url,
+                  "caption": caption,
+                  "published": "true",
+                  "access_token": token,
+              }).encode()
+              request = urllib.request.Request(endpoint, data=payload, method="POST")
+              try:
+                  with urllib.request.urlopen(request, timeout=60) as response:
+                      body = json.loads(response.read().decode())
+              except urllib.error.HTTPError as exc:
+                  detail = exc.read().decode(errors="replace")
+                  print(f"::error::{name} failed ({exc.code}): {detail}")
+                  sys.exit(1)
+              except Exception as exc:
+                  print(f"::error::{name} failed: {exc}")
+                  sys.exit(1)
+
+              post_id = body.get("post_id") or body.get("id")
+              if not post_id:
+                  print(f"::error::{name} returned no Facebook post ID: {body}")
+                  sys.exit(1)
+              published.append({"name": name, "id": post_id})
+              print(f"Published {name}: {post_id}")
+
+          with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as summary:
+              summary.write("## Facebook meme upload complete\n\n")
+              for item in published:
+                  summary.write(f"- {item['name']}: \`{item['id']}\`\n")
+
+          print(json.dumps(published, indent=2))
