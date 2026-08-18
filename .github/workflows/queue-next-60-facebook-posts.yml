@@ -22,6 +22,8 @@ jobs:
       FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
       META_ACCESS_TOKEN: ${{ secrets.FB_ACCESS_TOKEN }}
       GRAPH_VERSION: v21.0
+      RESUME_INDEX: "48"
+      BASE_SCHEDULE_EPOCH: "1787082657"
 
     steps:
       - name: Validate Meta configuration
@@ -119,7 +121,8 @@ jobs:
                   sys.exit(1)
 
           # Meta requires scheduled Page posts to be at least 10 minutes ahead.
-          start = int(time.time()) + 15 * 60
+          start = int(os.environ.get("BASE_SCHEDULE_EPOCH", int(time.time()) + 15 * 60))
+          resume_index = int(os.environ.get("RESUME_INDEX", "1"))
           interval = 12 * 60 * 60
           queue = []
           for round_number in (1, 2):
@@ -141,6 +144,8 @@ jobs:
           endpoint = f"{GRAPH}/{PAGE_ID}/photos"
           scheduled = []
           for index, (filename, caption) in enumerate(queue, start=1):
+              if index < resume_index:
+                  continue
               scheduled_at = start + (index - 1) * interval
               payload = {
                   "url": RAW_BASE + filename,
@@ -150,11 +155,21 @@ jobs:
                   "scheduled_publish_time": str(scheduled_at),
                   "access_token": page_token,
               }
-              try:
-                  body = request_json(endpoint, payload)
-              except Exception as exc:
-                  print(f"::error::Post {index}/60 ({filename}) failed: {exc}")
-                  print(f"Successfully queued before failure: {len(scheduled)}")
+              body = None
+              last_error = None
+              for attempt in range(1, 6):
+                  try:
+                      body = request_json(endpoint, payload)
+                      break
+                  except Exception as exc:
+                      last_error = exc
+                      if attempt < 5:
+                          delay = attempt * 5
+                          print(f"Post {index}/60 transient failure; retry {attempt}/5 in {delay}s: {exc}", flush=True)
+                          time.sleep(delay)
+              if body is None:
+                  print(f"::error::Post {index}/60 ({filename}) failed after 5 attempts: {last_error}")
+                  print(f"Successfully queued in this resume run: {len(scheduled)}")
                   sys.exit(1)
 
               post_id = body.get("post_id") or body.get("id")
@@ -169,19 +184,19 @@ jobs:
                       scheduled_at, datetime.timezone.utc
                   ).isoformat(),
               })
-              print(f"Queued {index:02d}/60 {filename}: {post_id}")
+              print(f"Queued {index:02d}/60 {filename}: {post_id}", flush=True)
               time.sleep(0.4)
 
           with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as summary:
               summary.write("# Next 60 Facebook posts queued\n\n")
-              summary.write(f"Count: **{len(scheduled)}**\n\n")
+              summary.write(f"Queued in this resume run: **{len(scheduled)}**; cumulative target: **60**.\n\n")
               summary.write("Cadence: every 12 hours for 30 days.\n\n")
               summary.write("| # | Asset | Scheduled UTC | Facebook ID |\n")
               summary.write("|---:|---|---|---|\n")
               for item in scheduled:
                   summary.write(
                       f"| {item['number']} | {item['asset']} | "
-                      f"{item['scheduled_at']} | \`{item['id']}\` |\n"
+                      f"{item['scheduled_at']} | `{item['id']}` |\n"
                   )
 
           print(json.dumps({"queued": len(scheduled), "posts": scheduled}, indent=2))
