@@ -34,7 +34,7 @@ jobs:
             return out
           accounts=collect(GRAPH+"/me/accounts?"+urllib.parse.urlencode({
             "fields":"id,name,access_token","limit":"100","access_token":TOKEN}))
-          pages=[p for p in accounts if p.get("name","").strip().lower()=="cabin midnight"]
+          pages=[p for p in accounts if "casual misconduct" in p.get("name","").strip().lower()]
           if len(pages)!=1:
             raise SystemExit("Safety gate: Casual Misconduct Page was not uniquely resolved")
           page=pages[0]; page_id=page["id"]; page_token=page["access_token"]
