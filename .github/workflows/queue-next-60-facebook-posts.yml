@@ -1,0 +1,187 @@
+name: Queue Next 60 Facebook Posts
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/queue-next-60-facebook-posts.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: queue-next-60-facebook-posts
+  cancel-in-progress: false
+
+jobs:
+  queue:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
+      META_ACCESS_TOKEN: ${{ secrets.FB_ACCESS_TOKEN }}
+      GRAPH_VERSION: v21.0
+
+    steps:
+      - name: Validate Meta configuration
+        shell: bash
+        run: |
+          test -n "$FB_PAGE_ID" || { echo "::error::FB_PAGE_ID is not configured"; exit 1; }
+          test -n "$META_ACCESS_TOKEN" || { echo "::error::FB_ACCESS_TOKEN is not configured"; exit 1; }
+
+      - name: Upload and schedule 60 Facebook posts
+        shell: python
+        run: |
+          import datetime
+          import json
+          import os
+          import sys
+          import time
+          import urllib.error
+          import urllib.parse
+          import urllib.request
+
+          PAGE_ID = os.environ["FB_PAGE_ID"]
+          TOKEN = os.environ["META_ACCESS_TOKEN"]
+          VERSION = os.environ.get("GRAPH_VERSION", "v21.0")
+          GRAPH = f"https://graph.facebook.com/{VERSION}"
+          RAW_BASE = (
+              "https://raw.githubusercontent.com/SmokeyRiverStudio/maplesap/"
+              "maplesap-launch-prep-june2026/public/assets/maplesap-field/"
+          )
+
+          assets = [
+              ("2024-season.jpeg", "The 2024 maple season, remembered one weather window at a time."),
+              ("2025-season.jpeg", "Every maple season writes its own story in cold nights and warm days."),
+              ("IMG_7154.MOV.png", "A moment from the bush—where observation becomes better timing."),
+              ("blackboard-forecast.png", "Watch the forecast. Follow the freeze-thaw rhythm. Be ready when the sap moves."),
+              ("blackboard-freeze.png", "Cold nights set the stage; warm days get the sap moving."),
+              ("blackboard-great-season.png", "A great maple season begins with timing, trees, and weather worth watching."),
+              ("blackboard-prime-window.png", "The prime maple window can be short. MapleSap helps you see it coming."),
+              ("book-chart.png", "Good records turn a season of observations into knowledge for the next one."),
+              ("book-cold-nights.png", "Cold nights are half of the maple equation."),
+              ("book-historical.png", "Historic weather patterns help put today's sap conditions in context."),
+              ("book-maple.png", "Maple knowledge grows through seasons spent watching and learning."),
+              ("img-1177.jpeg", "Field note: the sugar bush always has something new to teach."),
+              ("img-1309.jpeg", "A closer look from maple country."),
+              ("img-1316.jpeg", "Real conditions. Real trees. Better-informed maple decisions."),
+              ("img-1387.jpeg", "From the woods to the forecast—every detail matters."),
+              ("img-1390.jpeg", "The season is built one observation at a time."),
+              ("img-1450.jpeg", "Maple work starts with paying attention to the land."),
+              ("img-3444.jpeg", "A day in the bush is never wasted."),
+              ("img-3445.jpeg", "Weather changes quickly. Good field notes keep the story straight."),
+              ("img-5584.jpeg", "Maple season rewards preparation and patience."),
+              ("img-5720.jpeg", "The bush tells you plenty when you know what to watch."),
+              ("img-5812.jpg", "A field view from the maple season."),
+              ("img-8123.jpeg", "Conditions on the ground complete the forecast."),
+              ("map-na-distribution-detail.png", "Maple country spans a remarkable part of North America."),
+              ("mobile-scores-zoom.png", "MapleSap puts the forecast and timing signals in your pocket."),
+              ("na-distribution-detail.png", "Explore where maple species grow across North America."),
+              ("research-notes.png", "Research notes become better decisions when the next weather window arrives."),
+              ("smoker.png", "Traditional tools, hard-earned knowledge, and another day in the bush."),
+              ("sunrise.png", "Sunrise in maple country: another day to watch the weather and the trees."),
+              ("tap-drip.png", "That first drip is the sound of timing coming together."),
+          ]
+
+          def request_json(url, data=None):
+              encoded = urllib.parse.urlencode(data).encode() if data else None
+              request = urllib.request.Request(url, data=encoded, method="POST" if data else "GET")
+              try:
+                  with urllib.request.urlopen(request, timeout=90) as response:
+                      return json.loads(response.read().decode())
+              except urllib.error.HTTPError as exc:
+                  detail = exc.read().decode(errors="replace")
+                  raise RuntimeError(f"HTTP {exc.code}: {detail}") from exc
+
+          accounts_url = GRAPH + "/me/accounts?" + urllib.parse.urlencode({
+              "fields": "id,name,access_token",
+              "limit": "100",
+              "access_token": TOKEN,
+          })
+          accounts = request_json(accounts_url).get("data", [])
+          page = next((item for item in accounts if str(item.get("id")) == str(PAGE_ID)), None)
+          if not page or not page.get("access_token"):
+              available = ", ".join(str(item.get("id")) for item in accounts) or "none"
+              print(f"::error::Meta token does not return FB_PAGE_ID {PAGE_ID}; available: {available}")
+              sys.exit(1)
+          page_token = page["access_token"]
+
+          # Confirm every image is fetchable before creating any scheduled post.
+          for filename, _ in assets:
+              request = urllib.request.Request(RAW_BASE + filename, method="HEAD")
+              try:
+                  with urllib.request.urlopen(request, timeout=45) as response:
+                      if response.status >= 400:
+                          raise RuntimeError(f"status {response.status}")
+              except Exception as exc:
+                  print(f"::error::Asset preflight failed for {filename}: {exc}")
+                  sys.exit(1)
+
+          # Meta requires scheduled Page posts to be at least 10 minutes ahead.
+          start = int(time.time()) + 15 * 60
+          interval = 12 * 60 * 60
+          queue = []
+          for round_number in (1, 2):
+              for filename, base_caption in assets:
+                  if round_number == 1:
+                      caption = f"{base_caption} 🍁\n\nExplore MapleSap: https://maplesap.app"
+                  else:
+                      caption = (
+                          f"{base_caption} 🍁\n\n"
+                          "Plan around the weather, keep better field context, and make the most "
+                          "of the season with MapleSap. https://maplesap.app"
+                      )
+                  queue.append((filename, caption))
+
+          if len(queue) != 60:
+              print(f"::error::Expected 60 posts, built {len(queue)}")
+              sys.exit(1)
+
+          endpoint = f"{GRAPH}/{PAGE_ID}/photos"
+          scheduled = []
+          for index, (filename, caption) in enumerate(queue, start=1):
+              scheduled_at = start + (index - 1) * interval
+              payload = {
+                  "url": RAW_BASE + filename,
+                  "caption": caption,
+                  "published": "false",
+                  "unpublished_content_type": "SCHEDULED",
+                  "scheduled_publish_time": str(scheduled_at),
+                  "access_token": page_token,
+              }
+              try:
+                  body = request_json(endpoint, payload)
+              except Exception as exc:
+                  print(f"::error::Post {index}/60 ({filename}) failed: {exc}")
+                  print(f"Successfully queued before failure: {len(scheduled)}")
+                  sys.exit(1)
+
+              post_id = body.get("post_id") or body.get("id")
+              if not post_id:
+                  print(f"::error::Post {index}/60 returned no ID: {body}")
+                  sys.exit(1)
+              scheduled.append({
+                  "number": index,
+                  "asset": filename,
+                  "id": post_id,
+                  "scheduled_at": datetime.datetime.fromtimestamp(
+                      scheduled_at, datetime.timezone.utc
+                  ).isoformat(),
+              })
+              print(f"Queued {index:02d}/60 {filename}: {post_id}")
+              time.sleep(0.4)
+
+          with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as summary:
+              summary.write("# Next 60 Facebook posts queued\n\n")
+              summary.write(f"Count: **{len(scheduled)}**\n\n")
+              summary.write("Cadence: every 12 hours for 30 days.\n\n")
+              summary.write("| # | Asset | Scheduled UTC | Facebook ID |\n")
+              summary.write("|---:|---|---|---|\n")
+              for item in scheduled:
+                  summary.write(
+                      f"| {item['number']} | {item['asset']} | "
+                      f"{item['scheduled_at']} | \`{item['id']}\` |\n"
+                  )
+
+          print(json.dumps({"queued": len(scheduled), "posts": scheduled}, indent=2))
