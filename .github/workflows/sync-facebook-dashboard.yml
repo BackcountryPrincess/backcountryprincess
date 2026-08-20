@@ -1,0 +1,169 @@
+name: Sync Casual Misconduct dashboard data
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Daily at 11:17 UTC; offset minute avoids top-of-hour load.
+    - cron: "17 11 * * *"
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/sync-facebook-dashboard.yml"
+  pull_request:
+    paths:
+      - ".github/workflows/sync-facebook-dashboard.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: casual-misconduct-dashboard-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
+      META_ACCESS_TOKEN: ${{ secrets.FB_ACCESS_TOKEN }}
+      GRAPH_VERSION: v21.0
+      EXPECTED_PAGE_NAME: Casual Misconduct
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Validate Meta configuration
+        shell: bash
+        run: |
+          test -n "$FB_PAGE_ID" || { echo "::error::FB_PAGE_ID is not configured"; exit 1; }
+          test -n "$META_ACCESS_TOKEN" || { echo "::error::FB_ACCESS_TOKEN is not configured"; exit 1; }
+
+      - name: Read approved aggregate Page metrics
+        shell: python
+        run: |
+          import datetime as dt
+          import json
+          import os
+          import pathlib
+          import urllib.error
+          import urllib.parse
+          import urllib.request
+
+          page_id = os.environ["FB_PAGE_ID"]
+          token = os.environ["META_ACCESS_TOKEN"]
+          version = os.environ.get("GRAPH_VERSION", "v21.0")
+          expected_name = os.environ["EXPECTED_PAGE_NAME"]
+          graph_base = f"https://graph.facebook.com/{version}"
+
+          def graph(path, params):
+              query = urllib.parse.urlencode({**params, "access_token": token})
+              request = urllib.request.Request(
+                  f"{graph_base}/{path}?{query}",
+                  headers={"User-Agent": "SmokeyRiverStudioDashboard/1.0"},
+              )
+              try:
+                  with urllib.request.urlopen(request, timeout=45) as response:
+                      return json.loads(response.read().decode("utf-8"))
+              except urllib.error.HTTPError as exc:
+                  try:
+                      body = json.loads(exc.read().decode("utf-8"))
+                      message = body.get("error", {}).get("message", "Meta API request failed")
+                      code = body.get("error", {}).get("code", exc.code)
+                  except Exception:
+                      message, code = "Meta API request failed", exc.code
+                  raise RuntimeError(f"Meta API error {code}: {message}") from None
+
+          accounts = graph("me/accounts", {
+              "fields": "id,name,access_token",
+              "limit": "100",
+          }).get("data", [])
+          page = next((item for item in accounts if str(item.get("id")) == str(page_id)), None)
+          if not page or not page.get("access_token"):
+              raise RuntimeError("Configured token does not resolve the configured Facebook Page")
+          if page.get("name") != expected_name:
+              raise RuntimeError(
+                  f"Page identity mismatch: expected {expected_name!r}, resolved {page.get('name')!r}"
+              )
+
+          # Use the Page-scoped token only in memory; never write or log it.
+          token = page["access_token"]
+          identity = graph(page_id, {"fields": "name,fan_count,followers_count"})
+          posts = graph(f"{page_id}/published_posts", {"limit": "1", "summary": "true"})
+          post_count = (posts.get("summary") or {}).get("total_count")
+
+          now = dt.datetime.now(dt.timezone.utc)
+          metrics = {"daily_reach": None, "daily_engagements": None}
+          metric_errors = {}
+          for public_name, meta_name in (
+              ("daily_reach", "page_impressions_unique"),
+              ("daily_engagements", "page_post_engagements"),
+          ):
+              try:
+                  response = graph(f"{page_id}/insights", {
+                      "metric": meta_name,
+                      "period": "day",
+                      "since": int((now - dt.timedelta(days=8)).timestamp()),
+                      "until": int(now.timestamp()),
+                  })
+                  series = response.get("data", [])
+                  values = series[0].get("values", []) if series else []
+                  metrics[public_name] = values[-1].get("value") if values else None
+              except RuntimeError as exc:
+                  metric_errors[public_name] = str(exc)[:240]
+
+          payload = {
+              "schema_version": 1,
+              "source": "Meta Graph API",
+              "graph_version": version,
+              "page_name": identity.get("name"),
+              "followers": identity.get("followers_count"),
+              "fans": identity.get("fan_count"),
+              "daily_reach": metrics["daily_reach"],
+              "daily_engagements": metrics["daily_engagements"],
+              "published_post_count": post_count,
+              "metric_errors": metric_errors,
+              "refreshed_at": now.isoformat().replace("+00:00", "Z"),
+          }
+          pathlib.Path("dashboard").mkdir(exist_ok=True)
+          pathlib.Path("dashboard/facebook.json").write_text(
+              json.dumps(payload, indent=2, sort_keys=True) + "\n",
+              encoding="utf-8",
+          )
+          print(json.dumps({
+              "page_name": payload["page_name"],
+              "followers": payload["followers"],
+              "fans": payload["fans"],
+              "daily_reach_available": payload["daily_reach"] is not None,
+              "daily_engagements_available": payload["daily_engagements"] is not None,
+              "published_post_count": payload["published_post_count"],
+              "refreshed_at": payload["refreshed_at"],
+          }))
+
+      - name: Publish approved aggregate snapshot
+        if: github.event_name != 'pull_request'
+        shell: bash
+        run: |
+          if git diff --quiet -- dashboard/facebook.json && git ls-files --error-unmatch dashboard/facebook.json >/dev/null 2>&1; then
+            echo "Dashboard snapshot is unchanged."
+            exit 0
+          fi
+          git config user.name "Smokey River Studio Automation"
+          git config user.email "actions@users.noreply.github.com"
+          git add -- dashboard/facebook.json
+          git commit -m "Update Casual Misconduct dashboard metrics"
+          git push
+
+      - name: Write run summary
+        if: always()
+        shell: bash
+        run: |
+          {
+            echo "## Casual Misconduct dashboard sync"
+            echo
+            echo "- Mode: read-only Meta API"
+            echo "- Identity guard: Casual Misconduct"
+            echo "- Schedule: daily at 11:17 UTC"
+            echo "- Public output: approved aggregate metrics only"
+          } >> "$GITHUB_STEP_SUMMARY"
