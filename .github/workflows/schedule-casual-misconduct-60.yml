@@ -39,6 +39,8 @@ jobs:
           const PAGE_NAME = "Casual Misconduct";
           const BLOCKED = new Set(["BackcountryPrincess", "Backcountry Princess"]);
           const FOLDER_ID = "16kWUqaFEYnNrl71srcVmNBSlpkVIjpOS";
+          const ASSET_COMMIT = "d6c32934869f9bf7bc41ed9ac4fd4ea8b938ab46";
+          const ASSET_BASE = "https://raw.githubusercontent.com/SmokeyRiverStudio/maplesap/" + ASSET_COMMIT + "/facebook-assets/casual-misconduct/";
           const queue = JSON.parse(Buffer.from(process.env.QUEUE_B64, "base64").toString("utf8"));
           const userToken = process.env.FB_ACCESS_TOKEN;
           const ASSET_DIR = "facebook-assets/casual-misconduct";
@@ -114,9 +116,8 @@ jobs:
               console.log("Already present " + item.id + "/60: " + existingId);
               continue;
             }
-            const bytes = fs.readFileSync(ASSET_DIR + "/" + item.asset);
             const form = new FormData();
-            form.set("source", new Blob([bytes], {type: "image/png"}), item.asset);
+            form.set("url", ASSET_BASE + encodeURIComponent(item.asset));
             form.set("message", item.caption);
             form.set("published", "false");
             form.set("scheduled_publish_time", String(Math.floor(new Date(item.scheduledAt).valueOf() / 1000)));
