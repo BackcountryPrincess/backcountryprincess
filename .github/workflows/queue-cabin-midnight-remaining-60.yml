@@ -104,7 +104,7 @@ jobs:
           already=[photo for pid,photo in photos_by_id.items() if pid in scheduled_photo_ids]
           print(f"Reconciliation: uploaded={len(photos)} already_scheduled={len(already)} approved_candidates={len(candidates)}",flush=True)
           if (len(photos),len(already),len(candidates))!=(75,15,60):
-            raise RuntimeError("Safety gate: expected the established 75 uploaded / 15 scheduled / 60 remaining state; no writes made")
+            raise RuntimeError(f"Safety gate counts uploaded={len(photos)} scheduled_media={len(already)} remaining={len(candidates)}; expected 75/15/60; no writes made")
 
           slots=[]
           for item in QUEUE:
