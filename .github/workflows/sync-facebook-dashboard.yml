@@ -79,15 +79,17 @@ jobs:
               "fields": "id,name,access_token",
               "limit": "100",
           }).get("data", [])
-          page = next((item for item in accounts if str(item.get("id")) == str(page_id)), None)
-          if not page or not page.get("access_token"):
-              raise RuntimeError("Configured token does not resolve the configured Facebook Page")
-          if page.get("name") != expected_name:
+          matches = [item for item in accounts if item.get("name") == expected_name]
+          if len(matches) != 1 or not matches[0].get("access_token"):
+              available_names = sorted(item.get("name", "(unnamed)") for item in accounts)
               raise RuntimeError(
-                  f"Page identity mismatch: expected {expected_name!r}, resolved {page.get('name')!r}"
+                  f"Expected exactly one accessible Page named {expected_name!r}; "
+                  f"found {len(matches)}. Accessible Pages: {available_names}"
               )
 
-          # Use the Page-scoped token only in memory; never write or log it.
+          page = matches[0]
+          page_id = page["id"]
+          # Use the Page-scoped token and Page ID only in memory; never write or log them.
           token = page["access_token"]
           identity = graph(page_id, {"fields": "name,fan_count,followers_count"})
           posts = graph(f"{page_id}/published_posts", {"limit": "1", "summary": "true"})
