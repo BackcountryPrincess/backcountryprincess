@@ -104,8 +104,11 @@ jobs:
               console.log("Already present " + item.id + "/60: " + existingId);
               continue;
             }
+            const mediaResponse = await fetch(assetUrls[item.asset]);
+            if (!mediaResponse.ok) throw new Error("Prepared asset download failed for " + item.asset + ": " + mediaResponse.status);
+            const bytes = Buffer.from(await mediaResponse.arrayBuffer());
             const form = new FormData();
-            form.set("url", assetUrls[item.asset]);
+            form.set("source", new Blob([bytes]), item.asset);
             form.set("message", item.caption);
             form.set("published", "false");
             form.set("scheduled_publish_time", String(Math.floor(new Date(item.scheduledAt).valueOf() / 1000)));
