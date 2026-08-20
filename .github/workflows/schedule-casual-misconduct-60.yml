@@ -180,9 +180,21 @@ jobs:
         run: |
           state=failure
           description="Casual Misconduct queue scheduling failed"
+          context="facebook-queue/casual-misconduct-60"
           if [ "$JOB_STATUS" = "success" ]; then
             state=success
             description="Facebook returned all 60 Casual Misconduct scheduled posts"
+          elif [ -f proof/error.txt ]; then
+            error_text=$(cat proof/error.txt)
+            case "$error_text" in
+              *GOOGLE_DRIVE_ACCESS_TOKEN*) context="$context/missing-drive-token" ;;
+              *FB_ACCESS_TOKEN*) context="$context/missing-meta-token" ;;
+              *"Expected exactly one accessible"*) context="$context/page-resolution" ;;
+              *"Duplicate image bytes"*) context="$context/duplicate-assets" ;;
+              *"Drive is missing queue assets"*) context="$context/missing-assets" ;;
+              *"SyntaxError"*) context="$context/runner-syntax" ;;
+              *) context="$context/runtime-error" ;;
+            esac
           fi
-          jq -n --arg state "$state" --arg description "$description"             '{state:$state,context:"facebook-queue/casual-misconduct-60",description:$description}' > status.json
+          jq -n --arg state "$state" --arg context "$context" --arg description "$description"             '{state:$state,context:$context,description:$description}' > status.json
           curl --fail-with-body --silent --show-error             --request POST             --header "Authorization: Bearer $GH_TOKEN"             --header "Accept: application/vnd.github+json"             "https://api.github.com/repos/$REPOSITORY/statuses/$COMMIT_SHA"             --data @status.json
