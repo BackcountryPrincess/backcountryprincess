@@ -204,7 +204,8 @@ jobs:
           import json,os,urllib.request
           description=(os.environ.get("ERROR_MESSAGE") or "Facebook queue verification failed")[:140]
           url=f"https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.sha }}"
-          body=json.dumps({"state":"failure","context":"casual-misconduct/facebook-60","description":description}).encode()
+          context=("casual-misconduct/facebook-60/"+description)[:100]
+          body=json.dumps({"state":"failure","context":context,"description":description}).encode()
           request=urllib.request.Request(url,data=body,method="POST",headers={"Authorization":f"Bearer {os.environ['GH_TOKEN']}","Accept":"application/vnd.github+json","Content-Type":"application/json"})
           urllib.request.urlopen(request,timeout=30).read()
           raise SystemExit(description)
