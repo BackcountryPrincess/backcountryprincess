@@ -46,7 +46,16 @@ jobs:
           async function json(url, options = {}) {
             const response = await fetch(url, options);
             const body = await response.json().catch(() => ({}));
-            if (!response.ok || body.error) throw new Error((body.error && body.error.message) || ("HTTP " + response.status));
+            if (!response.ok || body.error) {
+              const graphError = body.error || {};
+              throw new Error([
+                graphError.message || ("HTTP " + response.status),
+                graphError.code != null ? "code=" + graphError.code : "",
+                graphError.error_subcode != null ? "subcode=" + graphError.error_subcode : "",
+                graphError.type ? "type=" + graphError.type : "",
+                graphError.fbtrace_id ? "trace=" + graphError.fbtrace_id : ""
+              ].filter(Boolean).join("; "));
+            }
             return body;
           }
           function graphUrl(endpoint, token, query = {}) {
@@ -107,7 +116,7 @@ jobs:
             }
             const bytes = fs.readFileSync(ASSET_DIR + "/" + item.asset);
             const form = new FormData();
-            form.set("source", new Blob([bytes]), item.asset);
+            form.set("source", new Blob([bytes], {type: "image/png"}), item.asset);
             form.set("message", item.caption);
             form.set("published", "false");
             form.set("scheduled_publish_time", String(Math.floor(new Date(item.scheduledAt).valueOf() / 1000)));
