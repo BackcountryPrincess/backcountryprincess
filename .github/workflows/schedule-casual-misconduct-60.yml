@@ -116,14 +116,21 @@ jobs:
               console.log("Already present " + item.id + "/60: " + existingId);
               continue;
             }
-            const form = new FormData();
-            form.set("url", ASSET_BASE + encodeURIComponent(item.asset));
-            form.set("message", item.caption);
-            form.set("published", "false");
-            form.set("scheduled_publish_time", String(Math.floor(new Date(item.scheduledAt).valueOf() / 1000)));
-            form.set("access_token", pageToken);
-            const result = await json(GRAPH + "/" + page.id + "/photos", {method: "POST", body: form});
-            const postId = result.post_id || result.id;
+            const photoForm = new FormData();
+            photoForm.set("url", ASSET_BASE + encodeURIComponent(item.asset));
+            photoForm.set("published", "false");
+            photoForm.set("access_token", pageToken);
+            const photo = await json(GRAPH + "/" + page.id + "/photos", {method: "POST", body: photoForm});
+            if (!photo.id) throw new Error("Meta returned no unpublished photo ID for queue item " + item.id);
+
+            const postForm = new FormData();
+            postForm.set("message", item.caption);
+            postForm.set("published", "false");
+            postForm.set("scheduled_publish_time", String(Math.floor(new Date(item.scheduledAt).valueOf() / 1000)));
+            postForm.set("attached_media", JSON.stringify([{media_fbid: photo.id}]));
+            postForm.set("access_token", pageToken);
+            const result = await json(GRAPH + "/" + page.id + "/feed", {method: "POST", body: postForm});
+            const postId = result.id;
             if (!postId) throw new Error("Meta returned no post ID for queue item " + item.id);
             records.push({...item, status: "scheduled", metaPostId: postId});
             existingMessages.set(item.caption.trim(), postId);
