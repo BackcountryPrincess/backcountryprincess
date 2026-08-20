@@ -38,7 +38,7 @@ jobs:
           const FOLDER_ID = "16kWUqaFEYnNrl71srcVmNBSlpkVIjpOS";
           const queue = JSON.parse(Buffer.from(process.env.QUEUE_B64, "base64").toString("utf8"));
           const userToken = process.env.FB_ACCESS_TOKEN;
-          const assetUrls = JSON.parse(Buffer.from(process.env.ASSET_URLS_B64, "base64").toString("utf8"));
+          let assetUrls;
           
           async function json(url, options = {}) {
             const response = await fetch(url, options);
@@ -65,6 +65,7 @@ jobs:
           
           async function main() {
           if (!userToken) throw new Error("FB_ACCESS_TOKEN is not configured");
+          assetUrls = JSON.parse(Buffer.from(process.env.ASSET_URLS_B64 || "", "base64").toString("utf8"));
           if (Object.keys(assetUrls).length !== 60) throw new Error("Expected 60 prepared Drive asset URLs");
           if (queue.length !== 60) throw new Error("Queue must contain exactly 60 posts");
           for (const key of ["id", "asset", "caption", "scheduledAt"]) {
