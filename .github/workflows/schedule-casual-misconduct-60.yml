@@ -64,6 +64,7 @@ jobs:
             return rows;
           }
           
+          async function main() {
           if (queue.length !== 60) throw new Error("Queue must contain exactly 60 posts");
           for (const key of ["id", "asset", "caption", "scheduledAt"]) {
             if (new Set(queue.map(item => item[key])).size !== 60) throw new Error("Duplicate queue " + key);
@@ -153,6 +154,14 @@ jobs:
           fs.appendFileSync(summary, "Window: **2026-08-22 12:15 ET** through **2026-09-20 20:15 ET**.\n\n");
           fs.appendFileSync(summary, "| # | Time (ET) | Asset | Status | Meta ID |\n|---:|---|---|---|---|\n");
           for (const record of records) fs.appendFileSync(summary, "| " + record.id + " | " + record.scheduledAt + " | " + record.asset + " | " + record.status + " | " + record.metaPostId + " |\n");
+          }
+          
+          main().catch(error => {
+            fs.mkdirSync("proof", {recursive: true});
+            fs.writeFileSync("proof/error.txt", error.stack || String(error));
+            console.error(error);
+            process.exitCode = 1;
+          });
       - name: Upload scheduling proof
         if: always()
         uses: actions/upload-artifact@v4
