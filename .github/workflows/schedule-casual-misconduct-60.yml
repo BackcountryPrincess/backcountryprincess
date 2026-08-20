@@ -173,7 +173,7 @@ jobs:
               *"Duplicate image bytes"*) context="$context/duplicate-assets" ;;
               *"Drive is missing queue assets"*) context="$context/missing-assets" ;;
               *"SyntaxError"*) context="$context/runner-syntax" ;;
-              *) context="$context/runtime-error" ;;
+              *) slug=$(head -n1 proof/error.txt | tr "[:upper:]" "[:lower:]" | sed "s/[^a-z0-9]/-/g;s/-\\{2,\\}/-/g;s/^-//;s/-$//" | cut -c1-55); context="$context/${slug:-runtime-error}" ;;
             esac
           fi
           jq -n --arg state "$state" --arg context "$context" --arg description "$description"             '{state:$state,context:$context,description:$description}' > status.json
