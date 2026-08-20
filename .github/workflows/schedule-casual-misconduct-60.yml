@@ -96,6 +96,16 @@ jobs:
           const pageToken = page.access_token;
           const identity = await json(graphUrl(page.id, pageToken, {fields: "id,name"}));
           if (identity.id !== page.id || identity.name !== PAGE_NAME) throw new Error("Page identity mismatch");
+          const permissions = await allPages(graphUrl("me/permissions", userToken));
+          const grantedPermissions = new Set(permissions.filter(permission => permission.status === "granted").map(permission => permission.permission));
+          const requiredPermissions = ["pages_show_list", "pages_read_engagement", "pages_manage_posts"];
+          const missingPermissions = requiredPermissions.filter(permission => !grantedPermissions.has(permission));
+          console.log("Verified Page: " + identity.name + "; Page tasks: " + JSON.stringify(page.tasks || []));
+          console.log("Granted required permissions: " + requiredPermissions.filter(permission => grantedPermissions.has(permission)).join(", "));
+          if (missingPermissions.length) throw new Error("Meta authorization is missing required permissions: " + missingPermissions.join(", "));
+          if (Array.isArray(page.tasks) && page.tasks.length && !page.tasks.includes("CREATE_CONTENT")) {
+            throw new Error("Casual Misconduct Page token lacks CREATE_CONTENT task");
+          }
           
           const missingAssets = queue.filter(item => !fs.existsSync(ASSET_DIR + "/" + item.asset)).map(item => item.asset);
           if (missingAssets.length) throw new Error("Repository assets missing: " + missingAssets.join(", "));
