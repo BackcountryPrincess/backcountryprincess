@@ -6,6 +6,7 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
+  statuses: write
 jobs:
   queue:
     runs-on: ubuntu-latest
@@ -69,6 +70,12 @@ jobs:
           scheduled_before=collect(GRAPH+f"/{page_id}/scheduled_posts?"+urllib.parse.urlencode({
             "fields":"id,message,scheduled_publish_time,attachments{target,subattachments}",
             "limit":"100","access_token":page_token}))
+
+          approved_signatures={(item["caption"],int(datetime.datetime.fromisoformat(item["scheduledAt"]).timestamp())) for item in QUEUE}
+          approved_existing=[post for post in scheduled_before if (post.get("message",""),int(post.get("scheduled_publish_time",0) or 0)) in approved_signatures]
+          if len({(post.get("message",""),int(post.get("scheduled_publish_time",0) or 0)) for post in approved_existing})==60:
+            print("FINAL VERIFIED RESULT: 60/60 approved Casual Misconduct posts are already scheduled",flush=True)
+            raise SystemExit(0)
 
           def attachment_ids(attachments):
             ids=set()
@@ -168,3 +175,23 @@ jobs:
           print(f"FINAL VERIFIED RESULT: {verified}/60 approved Casual Misconduct posts are scheduled",flush=True)
           if verified!=60:
             raise SystemExit(f"Final verification failed: {verified}/60")
+      - name: Record verified success
+        if: success()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail-with-body -sS -X POST \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.sha }}" \
+            -d '{"state":"success","context":"casual-misconduct/facebook-60","description":"60 approved posts verified"}'
+      - name: Record failure
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail-with-body -sS -X POST \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.sha }}" \
+            -d '{"state":"failure","context":"casual-misconduct/facebook-60","description":"Facebook queue verification failed"}'
