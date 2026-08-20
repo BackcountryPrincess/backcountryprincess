@@ -9,6 +9,7 @@ on:
 
 permissions:
   contents: read
+  statuses: write
 
 concurrency:
   group: schedule-casual-misconduct-60
@@ -159,3 +160,20 @@ jobs:
           name: casual-misconduct-60-post-proof
           path: proof/
           if-no-files-found: warn
+      - name: Record Facebook queue result
+        if: always()
+        env:
+          GH_TOKEN: ${{ github.token }}
+          COMMIT_SHA: ${{ github.sha }}
+          REPOSITORY: ${{ github.repository }}
+          JOB_STATUS: ${{ job.status }}
+        shell: bash
+        run: |
+          state=failure
+          description="Casual Misconduct queue scheduling failed"
+          if [ "$JOB_STATUS" = "success" ]; then
+            state=success
+            description="Facebook returned all 60 Casual Misconduct scheduled posts"
+          fi
+          jq -n --arg state "$state" --arg description "$description"             '{state:$state,context:"facebook-queue/casual-misconduct-60",description:$description}' > status.json
+          curl --fail-with-body --silent --show-error             --request POST             --header "Authorization: Bearer $GH_TOKEN"             --header "Accept: application/vnd.github+json"             "https://api.github.com/repos/$REPOSITORY/statuses/$COMMIT_SHA"             --data @status.json
