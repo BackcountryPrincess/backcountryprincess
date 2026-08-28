@@ -161,8 +161,6 @@ def main():
     }
     page = resolve_page(user_token)
     caption = CAPTIONS[seed]
-    raw_name = quote(video_path.name)
-    video_url = f"https://raw.githubusercontent.com/{REPO}/main/social-assets/casual-misconduct/seeds/{raw_name}"
     errors = {}
     if not state.get("facebook"):
         try:
@@ -171,6 +169,23 @@ def main():
             errors["facebook"] = str(exc)
     if not state.get("instagram"):
         try:
+            facebook_video_id = (state.get("facebook") or {}).get("video_id")
+            if not facebook_video_id:
+                raise RuntimeError("Facebook Reel must publish before Instagram can use the Meta-hosted source")
+            video_url = None
+            for _ in range(60):
+                source_data = graph(
+                    "GET",
+                    facebook_video_id,
+                    page["access_token"],
+                    params={"fields": "source", "access_token": page["access_token"]},
+                )
+                video_url = source_data.get("source")
+                if video_url:
+                    break
+                time.sleep(5)
+            if not video_url:
+                raise RuntimeError(f"Meta did not return a source URL for Facebook Reel {facebook_video_id} after 5 minutes")
             state["instagram"] = publish_instagram_reel(page, video_url, caption)
         except Exception as exc:
             errors["instagram"] = str(exc)
