@@ -147,7 +147,7 @@ def main():
     user_token = os.environ.get("FB_ACCESS_TOKEN", "").strip()
     if not user_token:
         raise RuntimeError("FB_ACCESS_TOKEN is not configured")
-    video_path = Path(f"social-assets/casual-misconduct/seeds/seed-{seed:02d}.mp4")
+    video_path = Path(os.environ.get("VIDEO_PATH", f"seed-{seed:02d}.mp4"))
     if not video_path.exists() or video_path.stat().st_size < 1_000_000:
         raise RuntimeError(f"Missing or invalid seed video: {video_path}")
     state_path = Path(f".social-state/casual-misconduct-seed-{seed:02d}.json")
