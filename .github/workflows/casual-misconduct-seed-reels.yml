@@ -61,6 +61,28 @@ jobs:
           gdown --fuzzy "https://drive.google.com/file/d/1dXjPthXPbGrgw6PvbLnEXnM1cx0AwCWP/view" -O /tmp/seed-01.mp4
           test "$(stat -c%s /tmp/seed-01.mp4)" -gt 1000000
           file /tmp/seed-01.mp4 | grep -qiE "mp4|iso media"
+          mkdir -p .social-state
+          python - <<'PY'
+          import json, datetime
+          receipt = {
+              "validated": True,
+              "page_id": "1055198774653024",
+              "page_name": "Casual Misconduct",
+              "drive_seed_01": True,
+              "validated_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+          }
+          open(".social-state/casual-misconduct-seed-validation.json", "w").write(json.dumps(receipt, indent=2) + "\n")
+          PY
+
+      - name: Persist validation receipt
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "Smokey River Social Automation"
+          git config user.email "automation@smokeyriver.studio"
+          git add .social-state/casual-misconduct-seed-validation.json
+          git commit -m "Verify Casual Misconduct Reel pipeline"
+          git push
 
   publish:
     if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
