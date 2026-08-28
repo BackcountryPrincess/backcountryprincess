@@ -1,211 +1,26 @@
 name: Queue Approved Casual Misconduct 60
+
+# Disabled on 2026-08-28 after review found this workflow could create,
+# verify, and replace scheduled Facebook posts for Casual Misconduct. Do not
+# re-enable until Jenn has approved the exact assets, captions, destinations,
+# timing, and cross-post plan.
+
 on:
-  push:
-    branches: [main]
-    paths: [".github/workflows/queue-cabin-midnight-remaining-60.yml"]
   workflow_dispatch:
+    inputs:
+      reason:
+        description: "Disabled placeholder only. This workflow does not queue posts."
+        required: false
+        type: string
+
 permissions:
   contents: read
-  statuses: write
+
 jobs:
-  queue:
+  disabled:
     runs-on: ubuntu-latest
-    timeout-minutes: 40
-    env:
-      META_ACCESS_TOKEN: ${{ secrets.FB_ACCESS_TOKEN }}
     steps:
-      - name: Validate identity, reconcile media, and schedule approved calendar
-        id: queue
-        continue-on-error: true
-        shell: python
+      - name: Queue disabled
         run: |
-          import datetime,json,os,sys,time,traceback,urllib.error,urllib.parse,urllib.request
-
-          def report_exception(exc_type,exc_value,exc_traceback):
-            message=(f"{exc_type.__name__}: {exc_value}").replace("\n"," ")[:180]
-            with open(os.environ["GITHUB_OUTPUT"],"a",encoding="utf-8") as output:
-              output.write(f"error={message}\n")
-            traceback.print_exception(exc_type,exc_value,exc_traceback)
-          sys.excepthook=report_exception
-
-          GRAPH="https://graph.facebook.com/v21.0"
-          EXPECTED_PAGE_NAME="Casual Misconduct"
-          TOKEN=os.environ.get("META_ACCESS_TOKEN","").strip()
-          if not TOKEN:
-            raise RuntimeError("FB_ACCESS_TOKEN is missing")
-
-          QUEUE=json.loads(r'''[{"id":1,"asset":"happy-beerthday.png","caption":"Another year older. Still making pour decisions. 🍺🎂","scheduledAt":"2026-08-20T12:15:00-04:00"},{"id":2,"asset":"holy-fuckballs-life-is-hard.png","caption":"Some days need deep breaths. Other days need stronger vocabulary.","scheduledAt":"2026-08-20T20:15:00-04:00"},{"id":3,"asset":"i-know-i-swear-a-lot.png","caption":"I know I swear a lot. It’s called sentence seasoning.","scheduledAt":"2026-08-21T12:15:00-04:00"},{"id":4,"asset":"man-cave-drinking-hours.png","caption":"Man cave hours: whenever the beer is cold.","scheduledAt":"2026-08-21T20:15:00-04:00"},{"id":5,"asset":"miss-the-shots-you-dont-take.png","caption":"You miss every shot you don’t take. Especially tequila.","scheduledAt":"2026-08-22T12:15:00-04:00"},{"id":6,"asset":"mum-is-a-sweary-motherfucker.png","caption":"Mum: powered by love, caffeine, and creative profanity.","scheduledAt":"2026-08-22T20:15:00-04:00"},{"id":7,"asset":"video-game-rage.png","caption":"It’s not rage. It’s highly competitive emotional feedback.","scheduledAt":"2026-08-23T12:15:00-04:00"},{"id":8,"asset":"welcome-to-the-shit-show.png","caption":"Welcome to the shit show. Seating is first come, first served.","scheduledAt":"2026-08-23T20:15:00-04:00"},{"id":9,"asset":"well-shit-that-didnt-work.png","caption":"Well, shit. Add it to the learning experience pile.","scheduledAt":"2026-08-24T12:15:00-04:00"},{"id":10,"asset":"chance-i-need-a-drink.png","caption":"There’s a strong chance this situation needs a drink.","scheduledAt":"2026-08-24T20:15:00-04:00"},{"id":11,"asset":"cold-beer-is-importanter.png","caption":"Grammar can wait. Cold beer is importanter.","scheduledAt":"2026-08-25T12:15:00-04:00"},{"id":12,"asset":"dirty-old-man-comes-out.png","caption":"Age adds wisdom. Apparently it also removes the filter.","scheduledAt":"2026-08-25T20:15:00-04:00"},{"id":13,"asset":"drinks-like-a-girl.png","caption":"Drinks like a girl—and handles it better than you.","scheduledAt":"2026-08-26T12:15:00-04:00"},{"id":14,"asset":"fucker-in-charge.png","caption":"Officially the fucker in charge. Unofficially winging it.","scheduledAt":"2026-08-26T20:15:00-04:00"},{"id":15,"asset":"i-drink-and-know-things.png","caption":"I drink and I know things. Mostly where the bottle opener is.","scheduledAt":"2026-08-27T12:15:00-04:00"},{"id":16,"asset":"is-fuck-off-an-emotion.png","caption":"If fuck off isn’t an emotion, explain Mondays.","scheduledAt":"2026-08-27T20:15:00-04:00"},{"id":17,"asset":"making-lists.png","caption":"Making lists: because forgetting things randomly lacks structure.","scheduledAt":"2026-08-28T12:15:00-04:00"},{"id":18,"asset":"my-bucket-list-ice-beer.png","caption":"Bucket list: ice, beer, repeat.","scheduledAt":"2026-08-28T20:15:00-04:00"},{"id":19,"asset":"not-alcoholics-weekends.png","caption":"We’re not alcoholics. We’re weekend enthusiasts.","scheduledAt":"2026-08-29T12:15:00-04:00"},{"id":20,"asset":"put-a-ring-on-it.png","caption":"If you liked it, you should’ve put a beer ring on it.","scheduledAt":"2026-08-29T20:15:00-04:00"},{"id":21,"asset":"stress-not-motorcycling-enough.png","caption":"This isn’t stress. It’s a motorcycle deficiency.","scheduledAt":"2026-08-30T12:15:00-04:00"},{"id":22,"asset":"bananas-for-the-shape.png","caption":"Bananas: proof that nature appreciates inappropriate comedy.","scheduledAt":"2026-08-30T20:15:00-04:00"},{"id":23,"asset":"consequences-of-my-actions.png","caption":"I have considered the consequences. I remain unconvinced.","scheduledAt":"2026-08-31T12:15:00-04:00"},{"id":24,"asset":"dinosaurs-didnt-have-coffee.png","caption":"Dinosaurs didn’t have coffee. Look how that worked out.","scheduledAt":"2026-08-31T20:15:00-04:00"},{"id":25,"asset":"dramatic-first.png","caption":"I’m not saying I’m dramatic. I’m saying let me finish the entrance.","scheduledAt":"2026-09-01T12:15:00-04:00"},{"id":26,"asset":"high-five-with-a-chair.png","caption":"Some people deserve a high five. With a chair. From across the room.","scheduledAt":"2026-09-01T20:15:00-04:00"},{"id":27,"asset":"lack-of-planning.png","caption":"Your lack of planning has not magically become my emergency.","scheduledAt":"2026-09-02T12:15:00-04:00"},{"id":28,"asset":"never-put-your-fingers.png","caption":"Life lessons are usually just warning labels with better stories.","scheduledAt":"2026-09-02T20:15:00-04:00"},{"id":29,"asset":"old-fashioned-wifey-stuff.png","caption":"Doing old-fashioned wifey stuff. Like whatever the hell I want.","scheduledAt":"2026-09-03T12:15:00-04:00"},{"id":30,"asset":"orgasm-donor.png","caption":"Community-minded. Generous. Questionable résumé.","scheduledAt":"2026-09-03T20:15:00-04:00"},{"id":31,"asset":"sarcasm-caffeine-inappropriate-thoughts.png","caption":"Sarcasm, caffeine, and inappropriate thoughts: the full breakfast.","scheduledAt":"2026-09-04T12:15:00-04:00"},{"id":32,"asset":"things-i-want-to-say-in-meeting.png","caption":"Today’s meeting could have been an email—and my thoughts could not.","scheduledAt":"2026-09-04T20:15:00-04:00"},{"id":33,"asset":"visitors-no-sense-of-humor.png","caption":"Visitors welcome. A sense of humour is mandatory.","scheduledAt":"2026-09-05T12:15:00-04:00"},{"id":34,"asset":"no-feelings.png","caption":"No feelings were harmed because none were available.","scheduledAt":"2026-09-05T20:15:00-04:00"},{"id":35,"asset":"safety-first-coffee-first.png","caption":"Safety first. Coffee slightly before that.","scheduledAt":"2026-09-06T12:15:00-04:00"},{"id":36,"asset":"fuck-it-bucket.png","caption":"Today’s agenda: place problem directly into the fuck-it bucket.","scheduledAt":"2026-09-06T20:15:00-04:00"},{"id":37,"asset":"love-you-phycho.png","caption":"Love you, psycho. Never change—actually, maybe a little.","scheduledAt":"2026-09-07T12:15:00-04:00"},{"id":38,"asset":"safety-first-coffee-first 2.png","caption":"Before procedures, paperwork, or people: coffee.","scheduledAt":"2026-09-07T20:15:00-04:00"},{"id":39,"asset":"fuck-comma.png","caption":"Punctuation matters. So does knowing exactly where to place the fuck.","scheduledAt":"2026-09-08T12:15:00-04:00"},{"id":40,"asset":"no-feelings 2.png","caption":"Emotionally unavailable, but consistently hilarious.","scheduledAt":"2026-09-08T20:15:00-04:00"},{"id":41,"asset":"porpcorn.png","caption":"Grab the porpcorn. The chaos is getting interesting.","scheduledAt":"2026-09-09T12:15:00-04:00"},{"id":42,"asset":"unsupervised.png","caption":"Left unsupervised again. Management continues to make bold choices.","scheduledAt":"2026-09-09T20:15:00-04:00"},{"id":43,"asset":"fuckening.png","caption":"You can feel it in the air: the fuckening is upon us.","scheduledAt":"2026-09-10T12:15:00-04:00"},{"id":44,"asset":"drunk-me.png","caption":"Drunk me keeps making plans sober me has to investigate.","scheduledAt":"2026-09-10T20:15:00-04:00"},{"id":45,"asset":"fuck-it-bucket 2.png","caption":"Bucket full. Problem solved enough.","scheduledAt":"2026-09-11T12:15:00-04:00"},{"id":46,"asset":"beer-tonight.png","caption":"Tonight’s forecast: 100% chance of beer.","scheduledAt":"2026-09-11T20:15:00-04:00"},{"id":47,"asset":"dumbest-way.png","caption":"If there’s a dumb way to do it, someone has already made a tutorial.","scheduledAt":"2026-09-12T12:15:00-04:00"},{"id":48,"asset":"fucupcakes.png","caption":"Freshly baked fucupcakes, topped with zero patience.","scheduledAt":"2026-09-12T20:15:00-04:00"},{"id":49,"asset":"cluster-fuck-fixer.png","caption":"Certified cluster-fuck fixer. Results may include more swearing.","scheduledAt":"2026-09-13T12:15:00-04:00"},{"id":50,"asset":"dear-dad.png","caption":"Dear Dad: thanks for the lessons, laughs, and questionable vocabulary.","scheduledAt":"2026-09-13T20:15:00-04:00"},{"id":51,"asset":"do-i-want-beer.png","caption":"Do I want a beer? Let’s not waste time on rhetorical questions.","scheduledAt":"2026-09-14T12:15:00-04:00"},{"id":52,"asset":"fuck-verb-offensive.png","caption":"Fuck: noun, verb, adjective, and complete project update.","scheduledAt":"2026-09-14T20:15:00-04:00"},{"id":53,"asset":"i-suck-at-apologies.png","caption":"I suck at apologies, but I’m excellent at awkward snacks afterward.","scheduledAt":"2026-09-15T12:15:00-04:00"},{"id":54,"asset":"nice-hot-cup-of-fuckoffee.png","caption":"Starting the day with a nice hot cup of fuckoffee.","scheduledAt":"2026-09-15T20:15:00-04:00"},{"id":55,"asset":"one-drink-two-day-hangover.png","caption":"One drink. Two-day hangover. Aging is a scam.","scheduledAt":"2026-09-16T12:15:00-04:00"},{"id":56,"asset":"programmer-better-idiots.png","caption":"Build something idiot-proof and the universe ships a better idiot.","scheduledAt":"2026-09-16T20:15:00-04:00"},{"id":57,"asset":"quit-your-job-like-a-pro.png","caption":"Quit your job like a pro: dramatically, but with your files backed up.","scheduledAt":"2026-09-17T12:15:00-04:00"},{"id":58,"asset":"sharks-dont-complain-about-monday.png","caption":"Sharks don’t complain about Monday. Be more shark.","scheduledAt":"2026-09-17T20:15:00-04:00"},{"id":59,"asset":"voices-arent-real.png","caption":"The voices aren’t real, but their suggestions are strangely specific.","scheduledAt":"2026-09-18T12:15:00-04:00"},{"id":60,"asset":"where-is-the-box.png","caption":"Think outside the box? First tell me where the hell the box went.","scheduledAt":"2026-09-18T20:15:00-04:00"}]''')
-          if len(QUEUE)!=60:
-            raise RuntimeError(f"Safety gate: expected 60 approved rows, found {len(QUEUE)}")
-
-          def req(url,data=None,method=None):
-            payload=urllib.parse.urlencode(data).encode() if data else None
-            request=urllib.request.Request(url,data=payload,method=method or ("POST" if data else "GET"))
-            try:
-              with urllib.request.urlopen(request,timeout=90) as response:
-                return json.loads(response.read().decode())
-            except urllib.error.HTTPError as exc:
-              raise RuntimeError(f"Graph API HTTP {exc.code}: {exc.read().decode(errors='replace')}")
-
-          def collect(url):
-            out=[]
-            while url:
-              body=req(url)
-              out.extend(body.get("data",[]))
-              url=body.get("paging",{}).get("next")
-            return out
-
-          accounts=collect(GRAPH+"/me/accounts?"+urllib.parse.urlencode({
-            "fields":"id,name,access_token,tasks","limit":"100","access_token":TOKEN}))
-          pages=[p for p in accounts if p.get("name","").strip()==EXPECTED_PAGE_NAME]
-          if len(pages)!=1:
-            visible=[p.get("name","") for p in accounts]
-            raise RuntimeError(f"Safety gate: exact Casual Misconduct Page resolution failed; visible pages={visible}")
-          page=pages[0]
-          page_id=str(page["id"])
-          page_token=page["access_token"]
-          identity=req(GRAPH+f"/{page_id}?"+urllib.parse.urlencode({"fields":"id,name","access_token":page_token}))
-          if str(identity.get("id"))!=page_id or identity.get("name")!=EXPECTED_PAGE_NAME:
-            raise RuntimeError(f"Safety gate: Page identity mismatch: {identity}")
-          tasks=set(page.get("tasks") or [])
-          if "CREATE_CONTENT" not in tasks:
-            raise RuntimeError(f"Safety gate: CREATE_CONTENT task missing; tasks={sorted(tasks)}")
-          print(f"Identity verified: {EXPECTED_PAGE_NAME} ({page_id})",flush=True)
-
-          since=int(datetime.datetime(2026,8,13,tzinfo=datetime.timezone.utc).timestamp())
-          photos=collect(GRAPH+f"/{page_id}/photos?"+urllib.parse.urlencode({
-            "type":"uploaded","fields":"id,name,created_time","since":str(since),
-            "limit":"100","access_token":page_token}))
-          scheduled_before=collect(GRAPH+f"/{page_id}/scheduled_posts?"+urllib.parse.urlencode({
-            "fields":"id,message,scheduled_publish_time,attachments{target,subattachments}",
-            "limit":"100","access_token":page_token}))
-
-          approved_signatures={(item["caption"],int(datetime.datetime.fromisoformat(item["scheduledAt"]).timestamp())) for item in QUEUE}
-          approved_existing=[post for post in scheduled_before if (post.get("message",""),int(post.get("scheduled_publish_time",0) or 0)) in approved_signatures]
-          if len({(post.get("message",""),int(post.get("scheduled_publish_time",0) or 0)) for post in approved_existing})==60:
-            print("FINAL VERIFIED RESULT: 60/60 approved Casual Misconduct posts are already scheduled",flush=True)
-            raise SystemExit(0)
-
-          def attachment_ids(attachments):
-            ids=set()
-            for attachment in attachments or []:
-              target=(attachment.get("target") or {}).get("id")
-              if target:
-                ids.add(str(target))
-              ids.update(attachment_ids((attachment.get("subattachments") or {}).get("data",[])))
-            return ids
-
-          scheduled_photo_ids=set()
-          for post in scheduled_before:
-            scheduled_photo_ids.update(attachment_ids((post.get("attachments") or {}).get("data",[])))
-          photos_by_id={str(photo["id"]):photo for photo in photos}
-          candidates=[photo for pid,photo in photos_by_id.items() if pid not in scheduled_photo_ids]
-          candidates.sort(key=lambda photo:(photo.get("created_time",""),str(photo.get("id",""))))
-          already=[photo for pid,photo in photos_by_id.items() if pid in scheduled_photo_ids]
-          print(f"Reconciliation: uploaded={len(photos)} already_scheduled={len(already)} approved_candidates={len(candidates)}",flush=True)
-          if (len(photos),len(already),len(candidates))!=(75,15,60):
-            raise RuntimeError(f"Safety gate counts uploaded={len(photos)} scheduled_media={len(already)} remaining={len(candidates)}; expected 75/15/60; no writes made")
-
-          slots=[]
-          for item in QUEUE:
-            when=datetime.datetime.fromisoformat(item["scheduledAt"])
-            if when.utcoffset()!=datetime.timedelta(hours=-4):
-              raise RuntimeError(f"Safety gate: invalid Toronto offset in row {item['id']}")
-            slots.append(int(when.timestamp()))
-          if len(set(slots))!=60 or slots!=sorted(slots):
-            raise RuntimeError("Safety gate: approved timestamps are duplicate or unordered")
-          if slots[0] <= int(time.time())+600:
-            raise RuntimeError("Safety gate: first approved slot is no longer at least 10 minutes in the future")
-
-          start,end=slots[0],slots[-1]
-          conflicts=[]
-          for post in scheduled_before:
-            when=int(post.get("scheduled_publish_time",0) or 0)
-            linked=attachment_ids((post.get("attachments") or {}).get("data",[]))
-            if start<=when<=end and linked.intersection(photos_by_id):
-              conflicts.append(post)
-          print(f"Existing generated posts to replace after verification: {len(conflicts)}",flush=True)
-
-          endpoint=GRAPH+f"/{page_id}/feed"
-          created=[]
-          try:
-            for item,photo,when in zip(QUEUE,candidates,slots):
-              data={
-                "message":item["caption"],
-                "attached_media":json.dumps([{"media_fbid":str(photo["id"])}]),
-                "published":"false",
-                "unpublished_content_type":"SCHEDULED",
-                "scheduled_publish_time":str(when),
-                "access_token":page_token}
-              body=None
-              for attempt in range(5):
-                try:
-                  body=req(endpoint,data)
-                  break
-                except Exception:
-                  if attempt==4:
-                    raise
-                  time.sleep((attempt+1)*5)
-              post_id=str(body.get("id","") or "")
-              if not post_id:
-                raise RuntimeError(f"No post id returned for approved row {item['id']}")
-              created.append(post_id)
-              print(f"Scheduled approved row {item['id']:02d}/60",flush=True)
-
-            verify=collect(GRAPH+f"/{page_id}/scheduled_posts?"+urllib.parse.urlencode({
-              "fields":"id,message,scheduled_publish_time","limit":"100","access_token":page_token}))
-            by_id={str(post.get("id")):post for post in verify}
-            missing=[post_id for post_id in created if post_id not in by_id]
-            if missing:
-              raise RuntimeError(f"Verification failed before replacement cleanup; missing={missing}")
-            for item,post_id,when in zip(QUEUE,created,slots):
-              post=by_id[post_id]
-              if post.get("message","")!=item["caption"] or int(post.get("scheduled_publish_time",0))!=when:
-                raise RuntimeError(f"Verification mismatch for approved row {item['id']}")
-            print("All 60 approved posts verified before cleanup",flush=True)
-          except Exception:
-            print(f"Failure detected; rolling back {len(created)} newly created posts",flush=True)
-            for post_id in reversed(created):
-              try:
-                req(GRAPH+f"/{post_id}?"+urllib.parse.urlencode({"access_token":page_token}),method="DELETE")
-              except Exception as rollback_error:
-                print(f"Rollback warning for {post_id}: {rollback_error}",flush=True)
-            raise
-
-          for post in conflicts:
-            post_id=str(post.get("id"))
-            req(GRAPH+f"/{post_id}?"+urllib.parse.urlencode({"access_token":page_token}),method="DELETE")
-            print(f"Removed superseded scheduled post {post_id}",flush=True)
-
-          final_posts=collect(GRAPH+f"/{page_id}/scheduled_posts?"+urllib.parse.urlencode({
-            "fields":"id,message,scheduled_publish_time","limit":"100","access_token":page_token}))
-          final_by_id={str(post.get("id")):post for post in final_posts}
-          verified=sum(1 for post_id in created if post_id in final_by_id)
-          print(f"FINAL VERIFIED RESULT: {verified}/60 approved Casual Misconduct posts are scheduled",flush=True)
-          if verified!=60:
-            raise RuntimeError(f"Final verification failed: {verified}/60")
-      - name: Record verified success
-        if: steps.queue.outcome == 'success'
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          curl --fail-with-body -sS -X POST \
-            -H "Authorization: Bearer $GH_TOKEN" \
-            -H "Accept: application/vnd.github+json" \
-            "https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.sha }}" \
-            -d '{"state":"success","context":"casual-misconduct/facebook-60","description":"60 approved posts verified"}'
-      - name: Record failure
-        if: steps.queue.outcome == 'failure'
-        env:
-          GH_TOKEN: ${{ github.token }}
-          ERROR_MESSAGE: ${{ steps.queue.outputs.error }}
-        shell: python
-        run: |
-          import json,os,urllib.request
-          description=(os.environ.get("ERROR_MESSAGE") or "Facebook queue verification failed")[:140]
-          url=f"https://api.github.com/repos/${{ github.repository }}/statuses/${{ github.sha }}"
-          context=("casual-misconduct/facebook-60/"+description)[:100]
-          body=json.dumps({"state":"failure","context":context,"description":description}).encode()
-          request=urllib.request.Request(url,data=body,method="POST",headers={"Authorization":f"Bearer {os.environ['GH_TOKEN']}","Accept":"application/vnd.github+json","Content-Type":"application/json"})
-          urllib.request.urlopen(request,timeout=30).read()
-          raise SystemExit(description)
+          echo "Casual Misconduct queue reconciliation is disabled."
+          echo "No Facebook scheduling, replacement, or deletion occurs from this workflow."
