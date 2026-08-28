@@ -1,175 +1,26 @@
 name: Casual Misconduct Seed Reels
 
+# Disabled on 2026-08-28 after review found this workflow could publish
+# unapproved Seed Reels directly to Facebook and Instagram. Do not re-enable
+# scheduling or publishing until Jenn has approved the plan, captions,
+# destination, timing, and exact assets.
+
 on:
-  push:
-    paths:
-      - ".github/workflows/casual-misconduct-seed-reels.yml"
-  schedule:
-    - cron: "15 0 * * *"
   workflow_dispatch:
     inputs:
-      seed_number:
-        description: "Seed number 1-9; blank uses the campaign date"
+      reason:
+        description: "Disabled placeholder only. This workflow does not publish."
         required: false
         type: string
 
 permissions:
-  contents: write
-
-concurrency:
-  group: casual-misconduct-seed-reels
-  cancel-in-progress: false
-
-env:
-  META_GRAPH_VERSION: v24.0
-  CASUAL_MISCONDUCT_PAGE_ID: "1055198774653024"
+  contents: read
 
 jobs:
-  validate:
-    if: github.event_name == 'push'
+  disabled:
     runs-on: ubuntu-latest
-    env:
-      FB_ACCESS_TOKEN: ${{ secrets.FB_ACCESS_TOKEN }}
     steps:
-      - name: Verify exact Page, permissions, Instagram link, and first Drive asset
-        shell: bash
+      - name: Publishing disabled
         run: |
-          set -euo pipefail
-          python -m pip install --quiet requests gdown
-          python - <<'PY'
-          import os, requests
-          token=os.environ["FB_ACCESS_TOKEN"]
-          version=os.environ["META_GRAPH_VERSION"]
-          target=os.environ["CASUAL_MISCONDUCT_PAGE_ID"]
-          r=requests.get(
-              f"https://graph.facebook.com/{version}/me/accounts",
-              params={"fields":"id,name,tasks,instagram_business_account","limit":"100","access_token":token},
-              timeout=60,
-          )
-          r.raise_for_status()
-          data=r.json()
-          pages=[p for p in data.get("data",[]) if str(p.get("id"))==target and p.get("name")=="Casual Misconduct"]
-          if len(pages)!=1:
-              raise SystemExit(f"Exact Page guard failed: {[{'id':p.get('id'),'name':p.get('name')} for p in data.get('data',[])]}")
-          page=pages[0]
-          if "CREATE_CONTENT" not in set(page.get("tasks") or []):
-              raise SystemExit(f"CREATE_CONTENT missing: {page.get('tasks')}")
-          if not (page.get("instagram_business_account") or {}).get("id"):
-              raise SystemExit("Linked Instagram Business account missing")
-          print("Exact Casual Misconduct Page and linked Instagram account verified.")
-          PY
-          gdown --fuzzy "https://drive.google.com/file/d/1dXjPthXPbGrgw6PvbLnEXnM1cx0AwCWP/view" -O /tmp/seed-01.mp4
-          test "$(stat -c%s /tmp/seed-01.mp4)" -gt 1000000
-          file /tmp/seed-01.mp4 | grep -qiE "mp4|iso media"
-          mkdir -p .social-state
-          python - <<'PY'
-          import json, datetime
-          receipt = {
-              "validated": True,
-              "page_id": "1055198774653024",
-              "page_name": "Casual Misconduct",
-              "drive_seed_01": True,
-              "validated_at": datetime.datetime.now(datetime.timezone.utc).isoformat(),
-          }
-          open(".social-state/casual-misconduct-seed-validation.json", "w").write(json.dumps(receipt, indent=2) + "\n")
-          PY
-
-      - name: Persist validation receipt
-        shell: bash
-        run: |
-          set -euo pipefail
-          git config user.name "Smokey River Social Automation"
-          git config user.email "automation@smokeyriver.studio"
-          git add .social-state/casual-misconduct-seed-validation.json
-          git commit -m "Verify Casual Misconduct Reel pipeline"
-          git push
-
-  publish:
-    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
-    runs-on: ubuntu-latest
-    env:
-      FB_ACCESS_TOKEN: ${{ secrets.FB_ACCESS_TOKEN }}
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Resolve due seed
-        id: seed
-        shell: bash
-        env:
-          MANUAL_SEED: ${{ inputs.seed_number }}
-        run: |
-          set -euo pipefail
-          if [ -n "${MANUAL_SEED:-}" ]; then
-            seed="$MANUAL_SEED"
-          else
-            local_date="$(TZ=America/Toronto date +%F)"
-            start="2026-08-28"
-            seed="$(( ( $(date -u -d "$local_date" +%s) - $(date -u -d "$start" +%s) ) / 86400 + 1 ))"
-          fi
-          if [ "$seed" -lt 1 ] || [ "$seed" -gt 9 ]; then
-            echo "due=false" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-          printf -v padded "%02d" "$seed"
-          echo "due=true" >> "$GITHUB_OUTPUT"
-          echo "number=$seed" >> "$GITHUB_OUTPUT"
-          echo "padded=$padded" >> "$GITHUB_OUTPUT"
-
-      - name: Download approved Reel privately from Drive
-        if: steps.seed.outputs.due == 'true'
-        id: download
-        shell: bash
-        env:
-          SEED: ${{ steps.seed.outputs.padded }}
-        run: |
-          set -euo pipefail
-          python -m pip install --quiet gdown
-          case "$SEED" in
-            01) id="1dXjPthXPbGrgw6PvbLnEXnM1cx0AwCWP" ;;
-            02) id="1J_NMrqkQ3MsOz7ipJBF5BF4II4Ch3GHh" ;;
-            03) id="1cLaNxX1Pn4wLHl7oxaRCZYIy_6P24F4E" ;;
-            04) id="1Zi_0YnzDrxsO6V8B1X6tlF7fa7tW9fIb" ;;
-            05) id="1NmCQ3mlBnDu4q5xDPLj-VIKA-rDhCWZr" ;;
-            06) id="1DhZbiY7PcsqnYhDK98DBTwl3je_rxH3I" ;;
-            07) id="1bi4mDvi_us8s2OhwA5XTuV3laR_xRafQ" ;;
-            08) id="11fZE38-GeDNize9-JjJFO4vC-iYCY_Xw" ;;
-            09) id="1-tyA8a5_rdhVKm7uyx4nc97PIrdoYPm0" ;;
-            *) exit 2 ;;
-          esac
-          target="/tmp/casual-misconduct-seed-$SEED.mp4"
-          gdown --fuzzy "https://drive.google.com/file/d/$id/view" -O "$target"
-          test "$(stat -c%s "$target")" -gt 1000000
-          file "$target" | grep -qiE "mp4|iso media"
-          echo "path=$target" >> "$GITHUB_OUTPUT"
-
-      - name: Publish to exact Casual Misconduct Facebook and Instagram
-        if: steps.seed.outputs.due == 'true'
-        id: publish
-        continue-on-error: true
-        env:
-          SEED_NUMBER: ${{ steps.seed.outputs.number }}
-          VIDEO_PATH: ${{ steps.download.outputs.path }}
-        run: |
-          python -m pip install --quiet requests
-          python scripts/publish_casual_misconduct_seed.py
-
-      - name: Persist platform IDs and error evidence
-        if: always() && steps.seed.outputs.due == 'true'
-        shell: bash
-        run: |
-          set -euo pipefail
-          if [ ! -d .social-state ]; then exit 0; fi
-          git config user.name "Smokey River Social Automation"
-          git config user.email "automation@smokeyriver.studio"
-          git add .social-state/
-          if ! git diff --cached --quiet; then
-            git pull --rebase
-            git commit -m "Record Casual Misconduct seed ${{ steps.seed.outputs.padded }} result"
-            git push
-          fi
-
-      - name: Surface a real publishing failure
-        if: steps.seed.outputs.due == 'true' && steps.publish.outcome == 'failure'
-        run: exit 1
+          echo "Casual Misconduct seed Reel automation is disabled."
+          echo "No Facebook or Instagram publishing occurs from this workflow."
